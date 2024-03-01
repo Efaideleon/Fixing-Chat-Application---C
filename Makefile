@@ -35,10 +35,10 @@ ServerGTK.o: TestClient.h TestServerGTK.c TestServer.h GlobalDefs.h send.h user.
 	
 #---- Executable Compilation
 Server: ServerGTK.o send.o user.o
-	gcc $(LFLAGS) ServerGTK.o send.o user.o -o ChatServer
+	gcc $(LFLAGS) -g ServerGTK.o send.o user.o -o ChatServer
 	
 Client: GTK.o user.o send.o Client.o
-	gcc $(LFLAGS) GTK.o user.o send.o Client.o -o ChatClient
+	gcc $(LFLAGS) -g GTK.o user.o send.o Client.o -o ChatClient
 
 #------------------------------------------------------------------------------------
 clean: 

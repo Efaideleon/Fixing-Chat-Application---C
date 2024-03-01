@@ -79,7 +79,7 @@ int SignUp(char *SendBuf, char *RecvBuf, int SocketFD)
 	}
 	return valid;
 }
-char *FL;
+char *FL = NULL;
 int SignIn(char *SendBuf, char *RecvBuf, int SocketFD)
 {
 	int valid = 0;
@@ -106,6 +106,13 @@ int SignIn(char *SendBuf, char *RecvBuf, int SocketFD)
 	}
 	char *Op = Sep[0];
 	i = 1;
+
+	// FIX: new fix
+	if (FL != NULL) 
+	{
+		free(FL);
+	}
+
 	FL = malloc(30*sizeof(char));
 	FL[0] = '\0';
 	while (Sep[i]!=NULL)
@@ -139,7 +146,10 @@ char *FriendList()
 	}	
 	return templist;*/
         printf("friendlist is this inside FriendList function in testclient %s\n", FL);
-	return FL;
+	//FIX: new Fix
+	char *friendListCopy = malloc(strlen(FL) + 1);
+	strcpy(friendListCopy, FL);
+	return friendListCopy;
 }
 
 void FreeFL()
@@ -148,6 +158,8 @@ void FreeFL()
 	if (FL!=NULL)
 	{
 		free(FL);
+		//FIX: new Fix
+		FL = NULL;	
 	}
 }
 void SendMessage(char *SendBuf, char *RecvBuf, int SocketFD) {

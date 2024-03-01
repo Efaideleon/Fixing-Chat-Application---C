@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        // {
+            // "name": "/C++: gcc build aCnd debug active file",
+            // "type": "cppdbg",
+            // "request": "launch",
+            // "program": "${fileDirname}/${fileBasenameNoExtension}",
+            // "args": [],
+            // "stopAtEntry": false,
+            // "cwd": "${fileDirname}",
+            // "environment": [],
+            // "externalConsole": false,
+            // "MIMode": "lldb",
+            // "preLaunchTask": "run the makefile"
+        // },
+        {
+            "name": "Debug Server",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/ChatServer",
+            "cwd": "${workspaceFolder}/",
+            "preLaunchTask": "build-server",
+            "MIMode": "lldb",
+            "args": ["3002"]
+        },
+        {
+            "name": "Debug Client",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/Users/efaideleon/Desktop/Fixing Chat Application in c/ChatClient",
+            "cwd": "/Users/efaideleon/Desktop/Fixing Chat Application in c",
+            "preLaunchTask": "build-client",
+            "MIMode": "lldb",
+            "args": ["localhost 3002"]
+        }
+    ]
+}
