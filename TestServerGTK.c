@@ -22,9 +22,10 @@ int Shutdown;
 int SignUp = 0;
 int SignIn = 0;
 int FlagDisconnect = 0;
-//int RetFriendList=0;
-// Used to print critical error diagnostic
-void FatalError(const char *ErrorMsg) {
+// int RetFriendList=0;
+//  Used to print critical error diagnostic
+void FatalError(const char *ErrorMsg)
+{
 #ifdef DEBUG
 	printf("FatalError() is called!\n");
 #endif
@@ -36,32 +37,35 @@ void FatalError(const char *ErrorMsg) {
 	exit(20);
 }
 
-//Code from sample server
-//Creates Socket on the Server 
-int MakeServerSocket(uint16_t PortNo) {
+// Code from sample server
+// Creates Socket on the Server
+int MakeServerSocket(uint16_t PortNo)
+{
 #ifdef DEBUG
 	printf("INIT: MakeServerSocket() is called.\n");
 #endif
 	int SocketFD;
 
-	//struct is in netinet/in.h
+	// struct is in netinet/in.h
 	struct sockaddr_in ServSocketName;
 
-	//Create the socket
+	// Create the socket
 	SocketFD = socket(PF_INET, SOCK_STREAM, 0);
-	if (SocketFD < 0) {
+	if (SocketFD < 0)
+	{
 		FatalError("Socket could not be created!\n");
 	}
 
 	ServSocketName.sin_family = AF_INET;
 	ServSocketName.sin_port = htons(PortNo);
 	ServSocketName.sin_addr.s_addr = htonl(INADDR_ANY);
-	if (bind(SocketFD, (struct sockaddr*)&ServSocketName,
-		sizeof(ServSocketName)) < 0)
+	if (bind(SocketFD, (struct sockaddr *)&ServSocketName,
+			 sizeof(ServSocketName)) < 0)
 	{
 		FatalError("binding the server to a socket failed");
 	}
-	if (listen(SocketFD, 5) < 0) {
+	if (listen(SocketFD, 5) < 0)
+	{
 		FatalError("listening on socket failed");
 	}
 #ifdef DEBUG
@@ -70,8 +74,9 @@ int MakeServerSocket(uint16_t PortNo) {
 	return SocketFD;
 }
 
-//Function to handle all the requests
-void ProcessRequest(int DataSocketFD, fd_set ReadFDs, RUNLIST *runlist) {
+// Function to handle all the requests
+void ProcessRequest(int DataSocketFD, fd_set ReadFDs, RUNLIST *runlist)
+{
 
 #ifdef DEBUG
 	printf("FUNC: ProcessRequest() is called.\n");
@@ -83,7 +88,8 @@ void ProcessRequest(int DataSocketFD, fd_set ReadFDs, RUNLIST *runlist) {
 	char SendBuf[BUFFSIZE];
 
 	n = read(DataSocketFD, RecvBuf, sizeof(RecvBuf) - 1);
-	if (n < 0) {
+	if (n < 0)
+	{
 		FatalError("reading from data socket failed");
 	}
 	RecvBuf[n] = 0;
@@ -92,20 +98,20 @@ void ProcessRequest(int DataSocketFD, fd_set ReadFDs, RUNLIST *runlist) {
 #endif
 	char *chk = strstr(RecvBuf, "SignUp");
 	printf("chk is %s inside process request\n", chk);
-	if (chk!=NULL)
+	if (chk != NULL)
 	{
 		SignUp = 1;
 	}
 	chk = strstr(RecvBuf, "SignIn");
-	if (chk!=NULL)
+	if (chk != NULL)
 	{
 		SignIn = 1;
 	}
-/*	chk = strstr(RecvBuf, "ReturnFriendList");
-	if (chk!=NULL)
-	{
-		RetFriendList = 1;
-	}*/
+	/*	chk = strstr(RecvBuf, "ReturnFriendList");
+		if (chk!=NULL)
+		{
+			RetFriendList = 1;
+		}*/
 	if (0 == strcmp(RecvBuf, "server shutdown"))
 	{
 		Shutdown = 1;
@@ -115,175 +121,180 @@ void ProcessRequest(int DataSocketFD, fd_set ReadFDs, RUNLIST *runlist) {
 		strncpy(SendBuf, "server shutdown", sizeof(SendBuf) - 1);
 		SendBuf[sizeof(SendBuf) - 1] = 0;
 	}
-	else if (SignIn != 0 || SignUp !=0)
+	else if (SignIn != 0 || SignUp != 0)
 	{
 #ifdef DEBUG
 		printf("FUNC: Client is attempting to sign up or sign in.\n");
 #endif
-/*		if (SignUp == 0 && SignIn == 0)
+		/*		if (SignUp == 0 && SignIn == 0)
+				{
+					strncpy(SendBuf, "Plase Enter UserName and PassWord", sizeof(SendBuf) - 1);
+					if (strcmp(RecvBuf, "SignUp") == 0)
+					{
+						SignUp = 2;
+					}
+					else if (strcmp(RecvBuf, "SignIn") == 0)
+					{
+						SignIn = 2;
+					}
+				}
+				else
+				{*/
+		char *UP[3];
+		char *temp2 = strtok(RecvBuf, " ");
+		int i = 0;
+		while (i < 3)
 		{
-			strncpy(SendBuf, "Plase Enter UserName and PassWord", sizeof(SendBuf) - 1);
-			if (strcmp(RecvBuf, "SignUp") == 0)
+			UP[i] = temp2;
+			temp2 = strtok(NULL, " ");
+			printf("UP[i] is %s\n", UP[i]);
+			i++;
+		}
+		char *UserName = UP[1];
+		char *PassWord = UP[2];
+		printf("username is :%s\n", UP[1]);
+		printf("password is : %s\n", UP[2]);
+
+		if (SignUp != 0)
+		{
+			char *readuser = reading_userlist();
+#ifdef DEBUG
+			printf("checking the list\n");
+#endif
+			int check = UsernameExists(UserName, readuser);
+#ifdef DEBUG
+			printf("checking\n");
+#endif
+			if (check == FALSE)
 			{
-				SignUp = 2;
+				CreateNewAcc(UserName, PassWord);
+				strncpy(SendBuf, "Created Account\n", sizeof(SendBuf) - 1);
+				strncpy(SendBuf, "success", sizeof(SendBuf) - 1);
 			}
-			else if (strcmp(RecvBuf, "SignIn") == 0)
+			else
 			{
-				SignIn = 2;
+				strncpy(SendBuf, "User name already exist, please type SignUp again and reenter a username\n", sizeof(SendBuf) - 1);
+				strncpy(SendBuf, "failed", sizeof(SendBuf) - 1);
+			}
+			SignUp = 0;
+
+			if (readuser)
+			{
+				free(readuser);
 			}
 		}
-		else
-		{*/
-			char *UP[3];
-			char *temp2 = strtok(RecvBuf, " ");
-			int i = 0;
-			while (i < 3)
+		else if (SignIn != 0)
+		{
+			printf("inside SignIn!\n");
+			int check2 = AbleLogin(UserName, PassWord);
+			printf("LOGIN: Successfully checked!\n");
+			if (check2 == TRUE)
 			{
-				UP[i] = temp2;
-				temp2 = strtok(NULL, " ");
-				printf("UP[i] is %s\n", UP[i]);
-				i++;
-			}
-			char *UserName = UP[1];
-			char *PassWord = UP[2];
-			printf("username is :%s\n", UP[1]);
-			printf("password is : %s\n", UP[2]);
+				//					USER *temp = CreateReturnUser(UserName);
+				strncpy(SendBuf, "success", sizeof(SendBuf) - 1);
+				RUNENTRY *temp = CreateRunEntry(CreateReturnUser(UserName), DataSocketFD);
 
-			if (SignUp != 0)
+				printf("LOGIN: Created RUNENTRY: username: %s   socketID: %d\n", temp->user->username, temp->socketID);
+				AppendRunEntry(temp, runlist);
+				strcat(SendBuf, " ");
+				printf("friend list is this: %s\n", temp->user->friendlist);
+
+				if (temp->user->friendlist != NULL)
+				{
+					printf("friend list is this: %s\n", temp->user->friendlist);
+					strcat(SendBuf, temp->user->friendlist);
+				}
+				printf("SendBuf is this inside SignIn : %s\n", SendBuf);
+			}
+			else
 			{
-				char *readuser = reading_userlist();
-#ifdef DEBUG
-                                printf("checking the list\n");
-#endif
-				int check = UsernameExists(UserName, readuser);
-#ifdef DEBUG
-				printf("checking\n");
-#endif
-				if (check == FALSE)
-				{
-					CreateNewAcc(UserName, PassWord);
-					strncpy(SendBuf, "Created Account\n", sizeof(SendBuf) - 1);
-                                        strncpy(SendBuf, "success", sizeof(SendBuf) - 1);                                
-				}
-				else
-				{
-					strncpy(SendBuf, "User name already exist, please type SignUp again and reenter a username\n", sizeof(SendBuf) - 1);
-                                        strncpy(SendBuf, "failed", sizeof(SendBuf) - 1); 
-				}
-				SignUp = 0;
-
-				if (readuser)
-				{
-					free(readuser);
-				}
+				strncpy(SendBuf, "failed", sizeof(SendBuf) - 1);
 			}
-			else if (SignIn != 0)
-			{
-				printf("inside SignIn!\n");
-				int check2 = AbleLogin(UserName, PassWord);
-				printf("LOGIN: Successfully checked!\n");
-				if (check2 == TRUE)
-				{
-//					USER *temp = CreateReturnUser(UserName);
-                                        strncpy(SendBuf, "success", sizeof(SendBuf) - 1);
-					RUNENTRY *temp = CreateRunEntry(CreateReturnUser(UserName), DataSocketFD);
-
-					 printf("LOGIN: Created RUNENTRY: username: %s   socketID: %d\n", temp->user->username,temp->socketID);
-                                        AppendRunEntry(temp, runlist);
-					strcat(SendBuf, " ");
-	                      printf("friend list is this: %s\n", temp->user->friendlist);
-
-
-					if (temp->user->friendlist!=NULL)
-					{
-						printf("friend list is this: %s\n", temp->user->friendlist);
-						strcat(SendBuf, temp->user->friendlist);		
-                                        }
-					printf("SendBuf is this inside SignIn : %s\n", SendBuf);
-				}
-				else
-				{
-					strncpy(SendBuf, "failed", sizeof(SendBuf) - 1);
-				}
-				SignIn = 0;
-			}
+			SignIn = 0;
+		}
 		SendBuf[sizeof(SendBuf) - 1] = 0;
-	}	
-	
+	}
+
 	else
 	{
 
 #ifdef DEBUG
-                printf("PROCESS: ProcessRequest() Client is attempting to send messages.\n");
+		printf("PROCESS: ProcessRequest() Client is attempting to send messages.\n");
 #endif
-                if (strcmp(RecvBuf, "Client has requested to shutdown.") == 0) 
+		if (strcmp(RecvBuf, "Client has requested to shutdown.") == 0)
 		{
 			bye = 1;
-                        strncpy(SendBuf, "Server will close your connection. Thank you.\n", sizeof(SendBuf) - 1);
-                        SendBuf[sizeof(SendBuf) - 1] = 0;
-
-                }
-		if (SendToMessage(RecvBuf) == TRUE) 
+			strncpy(SendBuf, "Server will close your connection. Thank you.\n", sizeof(SendBuf) - 1);
+			SendBuf[sizeof(SendBuf) - 1] = 0;
+		}
+		if (SendToMessage(RecvBuf) == TRUE)
 		{
-                        if (WriteIntendedFriend(DataSocketFD, RecvBuf, runlist) == 0) {
-                                strncpy(SendBuf, "This user is not on your contact list.\n", sizeof(SendBuf) - 1);
-                                SendBuf[sizeof(SendBuf) - 1] = 0;
-                        }
-                        else if (WriteIntendedUser(RecvBuf, runlist) == 2) {
-                                strncpy(SendBuf, "This user is not online right now.\n", sizeof(SendBuf) - 1);
-                                SendBuf[sizeof(SendBuf) - 1] = 0;
-                        }
-                        else {
-                                SendingMessages(RecvBuf, runlist, DataSocketFD);
+			if (WriteIntendedFriend(DataSocketFD, RecvBuf, runlist) == 0)
+			{
+				strncpy(SendBuf, "This user is not on your contact list.\n", sizeof(SendBuf) - 1);
+				SendBuf[sizeof(SendBuf) - 1] = 0;
+			}
+			else if (WriteIntendedUser(RecvBuf, runlist) == 2)
+			{
+				strncpy(SendBuf, "This user is not online right now.\n", sizeof(SendBuf) - 1);
+				SendBuf[sizeof(SendBuf) - 1] = 0;
+			}
+			else
+			{
+				SendingMessages(RecvBuf, runlist, DataSocketFD);
 #ifdef DEBUG
-                                printf("PROCESS: User was found\n");
+				printf("PROCESS: User was found\n");
 				printf("message sent successfully\n");
 #endif
-                                strncpy(SendBuf, "success", sizeof(SendBuf) - 1);
-                                SendBuf[sizeof(SendBuf) - 1] = 0;
-                        }
-
+				strncpy(SendBuf, "success", sizeof(SendBuf) - 1);
+				SendBuf[sizeof(SendBuf) - 1] = 0;
+			}
 		}
-		
-		if (strcmp(RecvBuf, "request") == 0) {
+
+		if (strcmp(RecvBuf, "request") == 0)
+		{
 			RetrieveMessages(DataSocketFD, SendBuf, runlist);
 		}
-	
-		if (CheckSendFriend(RecvBuf) == TRUE) {
-                        if (WriteIntendedUser(RecvBuf, runlist) == 0) {
-                                strncpy(SendBuf, "Could not find User\n", sizeof(SendBuf) - 1);
-                                SendBuf[sizeof(SendBuf) - 1] = 0;
-                        }
-                        else {
+
+		if (CheckSendFriend(RecvBuf) == TRUE)
+		{
+			if (WriteIntendedUser(RecvBuf, runlist) == 0)
+			{
+				strncpy(SendBuf, "Could not find User\n", sizeof(SendBuf) - 1);
+				SendBuf[sizeof(SendBuf) - 1] = 0;
+			}
+			else
+			{
 #ifdef DEBUG
-                                printf("User was found\n");
+				printf("User was found\n");
 #endif
-                                SendFriendRequest(RecvBuf, runlist, DataSocketFD);
-                                strncpy(SendBuf, "Friend Request Sent successfully.\n", sizeof(SendBuf) - 1);
-                                SendBuf[sizeof(SendBuf) - 1] = 0;
-                        }
-                }
-		
-		if (strstr(RecvBuf, "acceptrequest") != NULL) {
-                        AcceptFriendRequest(DataSocketFD, RecvBuf, runlist);
-                        strncpy(SendBuf, "Friend was added successfully.\n", sizeof(SendBuf) - 1);
-                        SendBuf[sizeof(SendBuf) - 1] = 0;
-                }
+				SendFriendRequest(RecvBuf, runlist, DataSocketFD);
+				strncpy(SendBuf, "Friend Request Sent successfully.\n", sizeof(SendBuf) - 1);
+				SendBuf[sizeof(SendBuf) - 1] = 0;
+			}
+		}
 
-                if (strstr(RecvBuf, "declinerequest") != NULL) {
-                        DeclineFriendRequest(DataSocketFD, RecvBuf, runlist);
+		if (strstr(RecvBuf, "acceptrequest") != NULL)
+		{
+			AcceptFriendRequest(DataSocketFD, RecvBuf, runlist);
+			strncpy(SendBuf, "Friend was added successfully.\n", sizeof(SendBuf) - 1);
+			SendBuf[sizeof(SendBuf) - 1] = 0;
+		}
 
-                        strncpy(SendBuf, "Friend was declined.\n", sizeof(SendBuf) - 1);
-                        SendBuf[sizeof(SendBuf) - 1] = 0;
-                }
+		if (strstr(RecvBuf, "declinerequest") != NULL)
+		{
+			DeclineFriendRequest(DataSocketFD, RecvBuf, runlist);
 
-		if (checkRemoveRequest(RecvBuf)==TRUE) {
-                        RemoveFriendRequest(DataSocketFD, RecvBuf, runlist);
-                        strncpy(SendBuf, "Friend was removed from FriendsList.\n", sizeof(SendBuf) - 1);
-                        SendBuf[sizeof(SendBuf) - 1] = 0;
+			strncpy(SendBuf, "Friend was declined.\n", sizeof(SendBuf) - 1);
+			SendBuf[sizeof(SendBuf) - 1] = 0;
+		}
 
-                }
-	
+		if (checkRemoveRequest(RecvBuf) == TRUE)
+		{
+			RemoveFriendRequest(DataSocketFD, RecvBuf, runlist);
+			strncpy(SendBuf, "Friend was removed from FriendsList.\n", sizeof(SendBuf) - 1);
+			SendBuf[sizeof(SendBuf) - 1] = 0;
+		}
 	}
 	l = strlen(SendBuf);
 	printf("Sending response: %s.\n", SendBuf);
@@ -293,16 +304,17 @@ void ProcessRequest(int DataSocketFD, fd_set ReadFDs, RUNLIST *runlist) {
 	{
 		FatalError("writing to data socket failed");
 	}
-        if (bye == 1) {
-                FlagDisconnect = 1;
-        }
-
+	if (bye == 1)
+	{
+		FlagDisconnect = 1;
+	}
 }
 
-//Main Loop p
-int main(int argc, char *argv[]) {
+// Main Loop p
+int main(int argc, char *argv[])
+{
 	printf("INIT: Starting Server File \"%s\"\n", Program);
-	//Main variables
+	// Main variables
 	int ServSocketFD;
 	int PortNo;
 	Shutdown = 0;
@@ -311,26 +323,27 @@ int main(int argc, char *argv[]) {
 #ifdef DEBUG
 	printf("INIT: Attempting to read arguments.\n");
 #endif
-	//Checking if port is entered and valid
-	if (argc < 2) {
+	// Checking if port is entered and valid
+	if (argc < 2)
+	{
 		fprintf(stderr, "No port number entered. Type \"%s portnumber\"\n", Program);
 		exit(10);
 	}
 	PortNo = atoi(argv[1]);
-	if (PortNo <= 2000) {
+	if (PortNo <= 2000)
+	{
 		fprintf(stderr, "Invalid port number. Enter a number over 2000\n");
 		exit(10);
 	}
 
-//	*************Socket Creating***************
+	//	*************Socket Creating***************
 	printf("INIT: Creating server socket with port number %d\n", PortNo);
 	ServSocketFD = MakeServerSocket((uint16_t)PortNo);
-
 
 #ifdef DEBUG
 	printf("INIT: About to start multiple client initialization.\n");
 #endif
-	//	************Multiple Clients handling**************** 
+	//	************Multiple Clients handling****************
 	// Some Logic for handling multiple clients
 	int DataSocketFD; // socket for new client
 	socklen_t ClientLen;
@@ -343,7 +356,7 @@ int main(int argc, char *argv[]) {
 	fd_set ReadFDs;
 #ifdef DEBUG
 	printf("INIT: Just Passed fd_set statements\n");
-#endif 
+#endif
 
 	int Timeout = 250000;
 	struct timeval TimeVal;
@@ -351,13 +364,13 @@ int main(int argc, char *argv[]) {
 	TimeVal.tv_usec = Timeout % 1000000;
 #ifdef DEBUG
 	printf("INIT: Just passed timeval statements.\n");
-#endif 
+#endif
 
 	FD_ZERO(&ActiveFDs);
 	FD_SET(ServSocketFD, &ActiveFDs);
 #ifdef DEBUG
 	printf("INIT: Just passed FD_ZERO and FD_SET.\n");
-#endif 
+#endif
 
 	RUNLIST *list = CreateRunList();
 #ifdef DEBUG
@@ -369,10 +382,11 @@ int main(int argc, char *argv[]) {
 	printf("INIT: Created UserList file.\n");
 #endif
 	int res, i;
-	
-//	************ Loop starts here ************
+
+	//	************ Loop starts here ************
 	printf("INIT: Starting Main Loop. Server is now running.\n");
-	do {
+	do
+	{
 		ReadFDs = ActiveFDs;
 
 		res = select(FD_SETSIZE, &ReadFDs, NULL, NULL, NULL);
@@ -380,11 +394,12 @@ int main(int argc, char *argv[]) {
 		{
 			FatalError("wait for input or timeout (select) failed");
 		}
-		else {
+		else
+		{
 #ifdef DEBUG
 			printf("LOOP: Res just assigned and is greater than 0. \n");
 #endif
-			for (i = 0; i<FD_SETSIZE; i++)
+			for (i = 0; i < FD_SETSIZE; i++)
 			{
 				if (FD_ISSET(i, &ReadFDs))
 				{
@@ -395,15 +410,15 @@ int main(int argc, char *argv[]) {
 #endif
 						ClientLen = sizeof(ClientAddress);
 						DataSocketFD = accept(ServSocketFD,
-							(struct sockaddr*)&ClientAddress, &ClientLen);
+											  (struct sockaddr *)&ClientAddress, &ClientLen);
 						if (DataSocketFD < 0)
 						{
 							FatalError("data socket creation (accept) failed");
 						}
 #ifdef DEBUG
 						printf("LOOP: %s: New client connected from %s:%hu.\n",
-							Program, inet_ntoa(ClientAddress.sin_addr), ntohs(ClientAddress.sin_port));				
-							printf("LOOP: %s: New Client has socketFD assigned to: %d...\n", Program, i);
+							   Program, inet_ntoa(ClientAddress.sin_addr), ntohs(ClientAddress.sin_port));
+						printf("LOOP: %s: New Client has socketFD assigned to: %d...\n", Program, i);
 #endif
 						FD_SET(DataSocketFD, &ActiveFDs);
 					}
@@ -413,12 +428,12 @@ int main(int argc, char *argv[]) {
 						printf("LOOP: %s: Dealing with client on FD%d...\n", Program, i);
 #endif
 						ProcessRequest(i, ReadFDs, list);
-						if (FlagDisconnect == 1) 
+						if (FlagDisconnect == 1)
 						{
-                                                        FlagDisconnect = 0;
-                                                        close(DataSocketFD);
-                                                        FD_CLR(DataSocketFD, &ActiveFDs);
-                                                }
+							FlagDisconnect = 0;
+							close(DataSocketFD);
+							FD_CLR(DataSocketFD, &ActiveFDs);
+						}
 					}
 				}
 			}
@@ -426,9 +441,7 @@ int main(int argc, char *argv[]) {
 
 	} while (Shutdown == 0);
 
-
 	printf("%s: Shutting down.\n", argv[0]);
 	close(ServSocketFD);
 	return 0;
 }
-

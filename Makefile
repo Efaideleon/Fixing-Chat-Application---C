@@ -19,19 +19,19 @@ all: Server Client
 
 #---- Object Compilation ----
 user.o: user.c user.h GlobalDefs.h
-	gcc $(CFLAGS) user.c -o user.o
+	gcc $(CFLAGS) -g user.c -o user.o
 
 Client.o: TestClient.h TestClient.c GlobalDefs.h
-	gcc $(CFLAGS) TestClient.c -o Client.o
+	gcc $(CFLAGS) -g TestClient.c -o Client.o
 	
 send.o: send.c send.h user.h GlobalDefs.h
-	gcc $(CFLAGS) send.c -o send.o
+	gcc $(CFLAGS) -g send.c -o send.o
 	
 GTK.o: GTK.c user.h TestClient.h GlobalDefs.h
-	gcc $(CFLAGS) GTK.c -o GTK.o
+	gcc $(CFLAGS) -g GTK.c -o GTK.o
 
 ServerGTK.o: TestClient.h TestServerGTK.c TestServer.h GlobalDefs.h send.h user.h
-	gcc $(CFLAGS) TestServerGTK.c -o ServerGTK.o  
+	gcc $(CFLAGS) -g TestServerGTK.c -o ServerGTK.o  
 	
 #---- Executable Compilation
 Server: ServerGTK.o send.o user.o

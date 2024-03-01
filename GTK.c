@@ -250,7 +250,7 @@ static void update_contact_list(GtkWidget *widget, gpointer data)
 		strcpy(contacts[i], MessageFF);
 	}
 
-	//Fix: new Fix
+	// Fix: new Fix
 	free(tempFL);
 }
 

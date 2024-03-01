@@ -22,7 +22,7 @@
             "cwd": "${workspaceFolder}/",
             "preLaunchTask": "build-server",
             "MIMode": "lldb",
-            "args": ["3002"]
+            "args": ["3003"]
         },
         {
             "name": "Debug Client",
@@ -32,7 +32,7 @@
             "cwd": "/Users/efaideleon/Desktop/Fixing Chat Application in c",
             "preLaunchTask": "build-client",
             "MIMode": "lldb",
-            "args": ["localhost 3002"]
+            "args": ["localhost", "3003"]
         }
     ]
 }
