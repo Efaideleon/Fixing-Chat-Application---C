@@ -155,7 +155,8 @@ char *reading_userInfo(char *username)
 
 	FILE *outfile;
 	char ch;
-	int length, i;
+	int length = 0;
+	int i = 0;
 	outfile = fopen(username, "r");
 
 	if (!outfile)
@@ -171,7 +172,6 @@ char *reading_userInfo(char *username)
 
 	rewind(outfile);
 	char *Info = malloc(length * sizeof(char));
-	Info[0] = '\0';
 	while ((ch = fgetc(outfile)) != EOF)
 	{
 		Info[i] = ch;
@@ -190,11 +190,17 @@ char *reading_userInfo(char *username)
 char *GetNamePassFriend(char *userInfo, int x)
 {
 
-	char *Info[3] = {'\0', '\0', '\0'};
+	char *Info[3]; 
 	int i = 0;
-	int l = strlen(userInfo);
+	int l = strlen(userInfo) + 1;
+
 	char *split = malloc(l * sizeof(char));
-	split[0] = '\0';
+	if (!split) 
+	{
+		printf("Memory allocation error!\n");
+		return NULL;
+	}
+
 	strcpy(split, userInfo);
 	char *token = strtok(split, "\n");
 #ifdef DEBUG
@@ -208,32 +214,44 @@ char *GetNamePassFriend(char *userInfo, int x)
 #endif
 		token = strtok(NULL, "\n");
 		i++;
-		Info[i] = '\0';
 	}
 
-	FILE *outfile;
-	outfile = fopen(Info[0], "w");
+	for (int j = 0; j < i; j++)
+	{
+		Info[j][strlen(Info[j])] = '\0';
+	}
+
+	FILE *outfile = fopen(Info[0], "w");
+	if (!outfile)
+	{
+		printf("Error opening file!\n");
+		free(split);
+		return NULL;
+	}
 
 	fprintf(outfile, "%s\n", Info[0]);
 	fprintf(outfile, "%s\n", Info[1]);
 	fprintf(outfile, "%s\n", Info[2]);
 
+	char *result = NULL;
+
 	if (x == 0)
 	{
-		strcpy(userInfo, Info[0]);
+		result = strdup(Info[0]);
 	}
 	else if (x == 1)
 	{
-		strcpy(userInfo, Info[1]);
+		result = strdup(Info[1]);
 	}
 	else if (x == 2)
 	{
-		strcpy(userInfo, Info[2]);
+		result = strdup(Info[2]);
 	}
 
 	fclose(outfile);
 	free(split);
-	return userInfo;
+
+	return result;
 }
 
 int FriendExists(USER *user, char *friend)
@@ -296,7 +314,7 @@ int AbleLogin(char *username, char *password)
 	if (UsernameExists(username, userList) == TRUE)
 	{
 		userInfo = reading_userInfo(username);
-		passInfo = GetNamePassFriend(userInfo, 1);
+		passInfo = GetNamePassFriend(userInfo, 1); //BUG: will need to free passInfo after
 		printf("password is %s\n", passInfo);
 		if (strcmp(password, passInfo) == 0)
 		{
