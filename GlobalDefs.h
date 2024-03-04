@@ -10,7 +10,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-#include <gtk/gtk.h>
+#include <gtk/gtk.h> 
 #include <glib.h>
 #define BUFFSIZE 512
 
