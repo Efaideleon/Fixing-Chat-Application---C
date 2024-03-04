@@ -224,7 +224,7 @@ static void check_credentials(void)
 static void update_contact_list(GtkWidget *widget, gpointer data)
 {
 	// Fix: new Fix
-	char *tempFL = Friend_List();
+	GtkWidget *tempFL = Friend_List();
 	char *tempf = strtok(tempFL, " ");
 
 	int j = 0;
@@ -332,20 +332,24 @@ int read_compare(char response2[400])
 	FILE *fp;
 	char content[100];
 
-	if ((fp = fopen("UserList", "r")) == NULL)
-	{
+	if ((fp = fopen("UserList", "r+")) == NULL)
+	{ // Open in read-write mode
 		printf("couldn't open file\n");
+		return -1; // Indicate error
 	}
 
 	while (fgets(content, sizeof(content), fp))
 	{
 		if (strstr(content, response2))
 		{
-			strncpy(content, "", sizeof(content));
+			strncpy(content, "", sizeof(content) - 1); // Leave space for null terminator
+			content[sizeof(content) - 1] = '\0';	   // Add null terminator
+			fclose(fp);
 			return 1;
 		}
 	}
 
+	fclose(fp);
 	return 0;
 }
 
@@ -361,7 +365,7 @@ void accept_friend(void)
 #ifdef DEBUG
 	printf("SendMessage('acceptrequest',temp, SocketFP)");
 #endif
-	char G_temp[20];
+	char G_temp[BUFFSIZE];
 	SendMessage("acceptrequest", G_temp, SocketFD);
 #ifdef DEBUG
 	printf("Response from the server after acceptrequest %s\n", G_temp);
@@ -466,10 +470,27 @@ static void button_clicked_register2(GtkWidget *widget, gpointer data)
 
 void UpdateWindow(void)
 {
+	int match;
+	char response[300];
 
 	while (gtk_events_pending())
 	{
 		currenttime();
+		if (signInvalid == TRUE && OpenDialog == 0 && FriendWindow != NULL) // gotta set OpenDialog to 1 to receive messages
+		{
+			if ((seconds_rn % 2) == 0)
+			{
+				SendMessage("request", response, SocketFD);
+			}
+			match = read_compare(response);
+			if ((match == 1) && (strcmp(response, username) != 0))
+			{
+				OpenDialog = 1;
+				open_dialog();
+				strncpy(response, "", sizeof(response));
+			}
+		}
+
 		if ((ChatWindow != NULL) && (OpenDialog == 0))
 		{
 			if ((seconds_rn % 2) == 0)
@@ -545,8 +566,11 @@ void CreateWindow()
 	}
 	if ((ChatFlag == 1) && (ChatWindow == NULL))
 	{
-		gtk_widget_destroy((FriendWindow));
-		FriendWindow = NULL;
+		if ((FriendWindow != NULL))
+		{
+			gtk_widget_destroy((FriendWindow)); // Exception has occurred.
+			FriendWindow = NULL;
+		}
 		ChatWindow = Chat_Window();
 		gtk_widget_show_all(ChatWindow);
 	}
@@ -680,6 +704,10 @@ GtkWidget *Chat_Window()
 	gtk_table_attach_defaults(GTK_TABLE(table), notebook, 0, 6, 0, 1);
 	gtk_widget_show(notebook);
 
+	for (int i = 0; i < 10; i++)
+	{
+		message_buffer[i] = gtk_text_buffer_new(NULL); // Create new buffers
+	}
 	// Scrolled Window with Text Box
 	for (int i = 9; i > -1; i--)
 	{
@@ -689,6 +717,7 @@ GtkWidget *Chat_Window()
 			Text_Area[i] = gtk_text_view_new();
 
 			message_buffer[i] = gtk_text_view_get_buffer(GTK_TEXT_VIEW(Text_Area[i]));
+
 			gtk_text_buffer_set_text(message_buffer[i], "Hello!", -1);
 
 			GtkWidget *console = gtk_table_new(3, 2, FALSE);
@@ -747,6 +776,12 @@ GtkWidget *Chat_Window()
 	}
 
 	// Set what page to start at (page 1)
+	// GtkWidget *parent = gtk_widget_get_parent(console);
+	// if (parent != NULL)
+	// {
+	// 	gtk_container_remove(GTK_CONTAINER(parent), console);
+	// }
+	// gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), console, label, 0);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 
 	return (window);
@@ -805,7 +840,7 @@ GtkWidget *Friend_List()
 		gtk_box_pack_start(GTK_BOX(vbox), button, 0, 1, 1);
 		g_signal_connect(button, "clicked", G_CALLBACK(close_friend_window), NULL);
 		g_signal_connect(button, "clicked", G_CALLBACK(create_chat_window), NULL);
-		g_signal_connect(button, "clicked", G_CALLBACK(update_contact_list), NULL);
+		// g_signal_connect(button, "clicked", G_CALLBACK(update_contact_list), NULL);
 		g_signal_connect(button, "clicked", G_CALLBACK(CreateWindow), NULL);
 	}
 
@@ -840,23 +875,20 @@ GtkWidget *Friend_List()
 
 static void open_dialog(void)
 {
-	if (ChatWindow != NULL)
-	{
-		GtkWidget *label, *button, *vbox;
-		window_dialog = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-		vbox = gtk_vbox_new(0, 0);
-		label = gtk_label_new("Accept New Friend Request!");
-		gtk_box_pack_start(GTK_BOX(vbox), label, 0, 0, 0);
-		button = gtk_button_new_with_label("ACCEPT");
-		g_signal_connect(button, "clicked", G_CALLBACK(accept_friend), NULL);
-		g_signal_connect(button, "clicked", G_CALLBACK(destroy_popup), NULL);
-		gtk_box_pack_start(GTK_BOX(vbox), button, 0, 0, 0);
-		button = gtk_button_new_with_label("CLOSE");
-		g_signal_connect(button, "clicked", G_CALLBACK(destroy_popup), NULL);
-		gtk_box_pack_start(GTK_BOX(vbox), button, 0, 0, 0);
-		gtk_container_add(GTK_CONTAINER(window_dialog), vbox);
-		gtk_widget_show_all(window_dialog);
-	}
+	GtkWidget *label, *button, *vbox;
+	window_dialog = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	vbox = gtk_vbox_new(0, 0);
+	label = gtk_label_new("Accept New Friend Request!");
+	gtk_box_pack_start(GTK_BOX(vbox), label, 0, 0, 0);
+	button = gtk_button_new_with_label("ACCEPT");
+	g_signal_connect(button, "clicked", G_CALLBACK(accept_friend), NULL);
+	g_signal_connect(button, "clicked", G_CALLBACK(destroy_popup), NULL);
+	gtk_box_pack_start(GTK_BOX(vbox), button, 0, 0, 0);
+	button = gtk_button_new_with_label("CLOSE");
+	g_signal_connect(button, "clicked", G_CALLBACK(destroy_popup), NULL);
+	gtk_box_pack_start(GTK_BOX(vbox), button, 0, 0, 0);
+	gtk_container_add(GTK_CONTAINER(window_dialog), vbox);
+	gtk_widget_show_all(window_dialog);
 }
 
 GtkWidget *Add_Friend_Window()

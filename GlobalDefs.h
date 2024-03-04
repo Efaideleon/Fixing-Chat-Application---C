@@ -11,7 +11,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <gtk/gtk.h>
-
+#include <glib.h>
 #define BUFFSIZE 512
 
 //TRUE AND FALSE IS DEFINED IN GTK

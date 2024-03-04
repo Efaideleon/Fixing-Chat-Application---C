@@ -616,9 +616,11 @@ void AcceptFriendRequest(int DataSocketFD, char *RecvBuf, RUNLIST *list)
 #ifdef DEBUG
 	printf("SEND.C : ACCEPTFRIENDREQUEST is being called.\n");
 #endif
-	RUNENTRY *findUser, *nextUser;
-	MSGENTRY *msgEntry, *nextEntry;
-	char *sender;
+	RUNENTRY *findUser = NULL;
+	RUNENTRY *nextUser = NULL;
+	MSGENTRY *msgEntry = NULL;
+	MSGENTRY *nextEntry = NULL;
+	char *sender = NULL;
 	int senderID = 0;
 
 	findUser = list->first;

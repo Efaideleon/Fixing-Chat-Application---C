@@ -4,7 +4,10 @@
         "string.h": "c",
         "unistd.h": "c",
         "stdint.h": "c",
-        "select.h": "c"
+        "select.h": "c",
+        "globaldefs.h": "c",
+        "time.h": "c",
+        "math.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
