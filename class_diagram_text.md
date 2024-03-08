@@ -177,12 +177,23 @@ button_clicked_remove(data, rm_f_entry, friend_name)
 
 ## Credential Service
 
+### Attributes
+
+* username
+* name
+* password
+* LogInFlag
+* RefFlag
+* signUpValid
+* SignUp
+* RegFlag
+
 ### Methods
 
 ```c
-button_clicked(data, entry, (G) username, (G) name) // get the username from the entry box and store it in a variable
+button_clicked(data, (G) entry, (G) username, (G) name) // get the username from the entry box and store it in a variable
 button_clicked2(data, (G) password, entry2, (G) LogInFlag) // get the password from the entry box and store it in a variable
-check_credentials((G) RefFlag, (G) name, (G) signUpvalid, (func) SignUp, (func) update_invalid_label, (func) SignIn, (func) FriendList) // check if the username can be registered, and check if username and password are correct
+check_credentials((G) RefFlag, (G) name, (G) signUpvalid, (G) RecvBuf, (func) SignUp, (func) update_invalid_label, (func) SignIn, (func) FriendList) // check if the username can be registered, and check if username and password are correct
 button_clicked_register((G) name, data, (G) entry) // stores the username in the name buffer when register button is clicked
 button_clicked_register2((G) password, data,(G) entry2,(G) RegFlag) // stores the password in the password buffer when the register button is clicked
 ```
@@ -190,6 +201,14 @@ button_clicked_register2((G) password, data,(G) entry2,(G) RegFlag) // stores th
 ---
 
 ## Message Service
+
+### Attributes
+
+* message
+* sent_message
+* message_buffer
+* st
+* OpenDialog
 
 ### Methods
 
@@ -201,6 +220,15 @@ request_message((G) ChatWindow, (G) contact, (G) username, (G) notebook, (G) Soc
 ---
 
 ## Window Manager
+
+### Attributes
+
+* ChatFlag
+* FriendFlag
+* Window
+* FriendWindow
+* RemoveFriendWindow
+* AddFriendWindow
 
 ### Methods
 
@@ -219,6 +247,16 @@ Delete_Friend_Entry((G) AddFriendWindow) // destroys the AddFriendWindow widget
 
 ## Friend Request Handler
 
+### Attributes
+
+* FriendL
+* contacts
+* add_to
+* friendname
+* add_f_entry
+* rm_f_entry
+* friend_name
+
 ### Methods
 
 ```c
@@ -232,6 +270,16 @@ button_clicked_remove(data, (G) rm_f_entry, (G) friend_name)
 
 ---
 
+## Network Service
+
+### Attributes
+
+* RecvBuf
+* SendBuf
+* SocketFD
+
+---
+
 ## Application Manager
 
 ### Methods
@@ -241,7 +289,7 @@ gtk_main_quit()
 close_program() // sets loop boolean to 0
 remove_book((G) notebook) // forces the widget to redraw itself
 ```
-
+---
 
 *Notes*
 
