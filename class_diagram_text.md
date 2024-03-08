@@ -168,12 +168,20 @@ button_clicked_remove(data, rm_f_entry, friend_name)
 ```
 
 ---
+---
 
 # Refactoring Initial State of GTK.c
 
 ## UI Class
 
 ---
+
+* LoginWindowUI
+* FriendListUI
+* ChatWindowUI
+* FriendRequesWidgetUI
+* RemoveFriendWidgetUI
+
 
 ## Credential Service
 
@@ -198,6 +206,22 @@ button_clicked_register((G) name, data, (G) entry) // stores the username in the
 button_clicked_register2((G) password, data,(G) entry2,(G) RegFlag) // stores the password in the password buffer when the register button is clicked
 ```
 
+### Attribute Dependencies
+
+* data
+* entry2
+* RecvBug
+* entry
+
+### Method Dependencies
+
+```c
+SignUp()
+update_invalid_label()
+SignIn()
+FriendList()
+```
+
 ---
 
 ## Message Service
@@ -214,7 +238,23 @@ button_clicked_register2((G) password, data,(G) entry2,(G) RegFlag) // stores th
 
 ```c
 send_message(data, (G) message, (G) sent_message, (G) message_buffer, (G) contacts, (G) SocketFD, (G) st, (func) SendMessage) // gets the message from the text entry box in the chat window and calls SendMessage
-request_message((G) ChatWindow, (G) contact, (G) username, (G) notebook, (G) SocketFD, (G)OpenDialog, (G) message_buffer, (func) SendMessage, (func) read_compare, (func) open_dialog) //retrieves message from the server
+request_message((G) ChatWindow, (G) contacts, (G) username, (G) notebook, (G) SocketFD, (G)OpenDialog, (G) message_buffer, (func) SendMessage, (func) read_compare, (func) open_dialog) //retrieves message from the server
+```
+
+### Attribute Dependencies
+
+* data
+* SocketFD
+* ChatWindow
+* contacts
+* notebook
+
+### Method Dependencies
+
+```c
+SendMessage()
+read_compare()
+open_dialog()
 ```
 
 ---
@@ -243,6 +283,19 @@ Delete_Friend_Entry2((G) RemoveFriendWindow) // destroys the RemoveFriendWindow 
 Delete_Friend_Entry((G) AddFriendWindow) // destroys the AddFriendWindow widget
 ```
 
+### Attribute Dependencies
+
+* RemoveFriendWindow
+* AddFriendWindow
+
+### Method Dependencies
+
+```c
+Login_Window() // class
+Chat_Window() // class
+Friend_List() // class
+```
+
 ---
 
 ## Friend Request Handler
@@ -266,6 +319,18 @@ accept_friend((func) SendMessage, (G) SocketFD, (G) OpenDialog) // sends message
 update_contact_list((func/class) Friend_List, (G) FriendL, (G) contacts, data) // refreshes the friend list with new friends or replaces it with No friend
 button_clicked_add(data, (G) add_f_entry, (G) friendname, (G) add_to, (G) SocketFD, (func) SendMessage) // when accept friend button is pressed send: addto 'friendname'
 button_clicked_remove(data, (G) rm_f_entry, (G) friend_name)
+```
+
+### Attribute Dependencies
+
+* OpenDialog
+* contacs
+* SocketFD
+
+### Function Dependencies
+
+```c
+SendMessage()
 ```
 
 ---
