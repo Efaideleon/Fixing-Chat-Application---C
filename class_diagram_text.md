@@ -180,11 +180,11 @@ button_clicked_remove(data, rm_f_entry, friend_name)
 ### Methods
 
 ```c
-button_clicked(data, entry, username, name) // get the username from the entry box and store it in a variable
-button_clicked2(data, password, entry2, LogInFlag) // get the password from the entry box and store it in a variable
-check_credentials(RefFlag, name, signUpvalid, (func) SignUp, (func) update_invalid_label, (func) SignIn, (func) FriendList) // check if the username can be registered, and check if username and password are correct
-button_clicked_register(name, data, entry) // stores the username in the name buffer when register button is clicked
-button_clicked_register2(password, data, entry2, RegFlag) // stores the password in the password buffer when the register button is clicked
+button_clicked(data, entry, (G) username, (G) name) // get the username from the entry box and store it in a variable
+button_clicked2(data, (G) password, entry2, (G) LogInFlag) // get the password from the entry box and store it in a variable
+check_credentials((G) RefFlag, (G) name, (G) signUpvalid, (func) SignUp, (func) update_invalid_label, (func) SignIn, (func) FriendList) // check if the username can be registered, and check if username and password are correct
+button_clicked_register((G) name, data, (G) entry) // stores the username in the name buffer when register button is clicked
+button_clicked_register2((G) password, data,(G) entry2,(G) RegFlag) // stores the password in the password buffer when the register button is clicked
 ```
 
 ---
@@ -194,8 +194,8 @@ button_clicked_register2(password, data, entry2, RegFlag) // stores the password
 ### Methods
 
 ```c
-send_message(data, message, sent_message, message_buffer, contacts, SocketFD, st, (func) SendMessage) // gets the message from the text entry box in the chat window and calls SendMessage
-request_message(ChatWindow, contact, username, notebook, SocketFD, OpenDialog, message_buffer, (func) SendMessage, (func) read_compare, (func) open_dialog) //retrieves message from the server
+send_message(data, (G) message, (G) sent_message, (G) message_buffer, (G) contacts, (G) SocketFD, (G) st, (func) SendMessage) // gets the message from the text entry box in the chat window and calls SendMessage
+request_message((G) ChatWindow, (G) contact, (G) username, (G) notebook, (G) SocketFD, (G)OpenDialog, (G) message_buffer, (func) SendMessage, (func) read_compare, (func) open_dialog) //retrieves message from the server
 ```
 
 ---
@@ -206,28 +206,28 @@ request_message(ChatWindow, contact, username, notebook, SocketFD, OpenDialog, m
 
 ```c
 create_friend_window() // sets flag to create friend window
-CreateWindow(ChatFlag, FriendFlag, Window, FriendWindow, (func/class) Login_Window, ChatWindow, (func/class) Chat_Window(), (func/class) Friend_List) // determines which window to create and destroy based on the flags
+CreateWindow((G) ChatFlag, (G) FriendFlag, (G) Window, (G) FriendWindow, (func/class) Login_Window, (G) ChatWindow, (func/class) Chat_Window(), (func/class) Friend_List) // determines which window to create and destroy based on the flags
 delete_chat_window() // sets flag to delete chat window
 close_friend_window() // set Friendflag to 0 to show that its inactive
 create_chat_window() // set ChatFlag to 1 for active
 delete_friend_window() // set FriendFlag to 0 to show that its inactive
-Delete_Friend_Entry2(RemoveFriendWindow) // destroys the RemoveFriendWindow widget
-Delete_Friend_Entry(AddFriendWindow) // destroys the AddFriendWindow widget
+Delete_Friend_Entry2((G) RemoveFriendWindow) // destroys the RemoveFriendWindow widget
+Delete_Friend_Entry((G) AddFriendWindow) // destroys the AddFriendWindow widget
 ```
 
---
+---
 
 ## Friend Request Handler
 
 ### Methods
 
 ```c
-accept_friend((func) SendMessage, SocketFD, OpenDialog) // sends message to the server with acceptrequest
+accept_friend((func) SendMessage, (G) SocketFD, (G) OpenDialog) // sends message to the server with acceptrequest
 (func/Class) Remove_Friend_Window
 (func/Class) Add_Friend_Window
-update_contact_list((func/class) Friend_List, FriendL, contacts) // refreshes the friend list with new friends or replaces it with No friend
-button_clicked_add(data, add_f_entry, friendname, add_to, SocketFD, (func) SendMessage) // when accept friend button is pressed send: addto 'friendname'
-button_clicked_remove(data, rm_f_entry, friend_name)
+update_contact_list((func/class) Friend_List, (G) FriendL, (G) contacts, data) // refreshes the friend list with new friends or replaces it with No friend
+button_clicked_add(data, (G) add_f_entry, (G) friendname, (G) add_to, (G) SocketFD, (func) SendMessage) // when accept friend button is pressed send: addto 'friendname'
+button_clicked_remove(data, (G) rm_f_entry, (G) friend_name)
 ```
 
 ---
@@ -239,5 +239,10 @@ button_clicked_remove(data, rm_f_entry, friend_name)
 ```c
 gtk_main_quit()
 close_program() // sets loop boolean to 0
-remove_book(notebook) // forces the widget to redraw itself
+remove_book((G) notebook) // forces the widget to redraw itself
 ```
+
+
+*Notes*
+
+* (G) - stands for global variable
