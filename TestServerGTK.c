@@ -23,7 +23,13 @@ int SignUp = 0;
 int SignIn = 0;
 int FlagDisconnect = 0;
 // int RetFriendList=0;
-//  Used to print critical error diagnostic
+
+/**
+ * @brief
+ * Used to print critical error diagnostic
+ * @param ErrorMsg
+ * Receives the error message to display
+ */
 void FatalError(const char *ErrorMsg)
 {
 #ifdef DEBUG
@@ -74,7 +80,13 @@ int MakeServerSocket(uint16_t PortNo)
 	return SocketFD;
 }
 
-// Function to handle all the requests
+/**
+ * @brief 
+ * Function to handle all the requessts
+ * @param DataSocketFD 
+ * @param ReadFDs 
+ * @param runlist 
+ */
 void ProcessRequest(int DataSocketFD, fd_set ReadFDs, RUNLIST *runlist)
 {
 

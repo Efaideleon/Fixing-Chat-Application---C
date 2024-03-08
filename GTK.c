@@ -6,7 +6,6 @@
 #include "TestClient.h"
 #include "GlobalDefs.h"
 #include <sys/time.h>
-// #include "user.h"
 /*******************    MAIN PROGRAM    ******************************/
 // Variables
 // GTK Widget
@@ -99,9 +98,6 @@ static void delete_chat_window(GtkWidget *widget, gpointer data)
 }
 static void create_friend_window(GtkWidget *widget, gpointer data)
 {
-#ifdef DEBUG
-	printf("friend flag turning into 1\n");
-#endif
 	FriendFlag = 1;
 }
 static void close_friend_window(GtkWidget *widget, gpointer data)
@@ -141,83 +137,40 @@ static void check_credentials(void)
 	if (RegFlag != 0 && name != NULL)
 	{
 
-#ifdef DEBUG
-		printf("SignUp function is called\n");
-#endif
 		signUpvalid = SignUp(name, RecvBuf, SocketFD);
-#ifdef DEBUG
-		printf("SignUp function finished\n");
-#endif
 		RegFlag = 0;
 		if (signUpvalid == TRUE)
 		{
 			signInvalid = TRUE;
-#ifdef DEBUG
-			printf("SignUp function is called\n");
-#endif
 			update_invalid_label();
-#ifdef DEBUG
-			printf("signInvalid is1 %d\n", signInvalid);
-			printf("signUpValid is2 :%d\n", signUpvalid);
-#endif
 		}
 		else if (signInvalid == FALSE)
 		{
 			signInvalid = FALSE;
 			update_invalid_label();
-#ifdef DEBUG
-			printf("signInvalid is3 %d\n", signInvalid);
-			printf("signUpValid is4 :%d\n", signUpvalid);
-#endif
 		}
 	}
 	if (LogInFlag != 0 && name != NULL)
 	{
 		signInvalid = SignIn(name, RecvBuf, SocketFD);
-#ifdef DEBUG
-		printf("SignIn function finished\n");
-#endif
 		fl = malloc(30 * sizeof(char));
 		fl[0] = '\0';
 		strcat(fl, FriendList());
-#ifdef DEBUG
-		printf("Friendlist is %s inside loginFlag\n", fl);
-#endif
 		if (fl != NULL)
 		{
 			printf("fl is %s\n", fl);
 		}
 		LogInFlag = 0;
-#ifdef DEBUG
-		printf("chekc point 1\n");
-#endif
 		if (signInvalid == TRUE)
 		{
 			signUpvalid = TRUE;
-#ifdef DEBUG
-			printf("signInvalid is5 %d\n", signInvalid);
-			printf("signUpValid is6 :%d\n", signUpvalid);
-#endif
 			update_invalid_label();
-#ifdef DEBUG
-			printf("signInvalid is5 %d\n", signInvalid);
-			printf("signUpValid is6 :%d\n", signUpvalid);
-#endif
 		}
 		else if (signInvalid == FALSE)
 		{
 			signUpvalid = FALSE;
-#ifdef DEBUG
-			printf("signInvalid is7 %d\n", signInvalid);
-			printf("signUpValid is8 :%d\n", signUpvalid);
-#endif
 			update_invalid_label();
 		}
-#ifdef DEBUG
-		printf("signInvalid9 is %d\n", signInvalid);
-		printf("signUpValid is10 :%d\n", signUpvalid);
-		printf("Friendlist flag is: %d\n", FriendFlag);
-#endif
 	}
 }
 // Update Contact List
@@ -280,9 +233,6 @@ static void send_message(GtkWidget *widget, gpointer data)
 	strcat(st, contacts[i]);
 	strcat(st, " ");
 	strcat(st, sent_message);
-#ifdef DEBUG
-	printf("SendBuf: %s\n", st);
-#endif
 	SendMessage(st, recieved, SocketFD);
 
 	strncpy(sent_message, "", sizeof(sent_message)); /* clear sent_message buffer */
@@ -362,14 +312,8 @@ void accept_friend(void)
 	 * SendMessage parameter 1 is "acceptrequest"
 	 */
 
-#ifdef DEBUG
-	printf("SendMessage('acceptrequest',temp, SocketFP)");
-#endif
 	char G_temp[BUFFSIZE];
 	SendMessage("acceptrequest", G_temp, SocketFD);
-#ifdef DEBUG
-	printf("Response from the server after acceptrequest %s\n", G_temp);
-#endif
 	strncpy(G_temp, "", sizeof(G_temp));
 	OpenDialog = 0;
 }
@@ -388,16 +332,10 @@ static void button_clicked_add(GtkWidget *widget, gpointer data)
 
 	strcat(add_to, "addto ");
 	strcat(add_to, friendname);
-#ifdef DEBUG
-	printf("calling SendMessage, sending to server  = %s\n ", add_to);
-#endif
 	SendMessage(add_to, response_add, SocketFD);
 	printf("response from server = %s\n", response_add);
 
 	strncpy(add_to, "", sizeof(add_to));
-#ifdef DEBUG
-	printf("friend name to be added %s\n", friendname);
-#endif
 	strncpy(response_add, "", sizeof(response_add));
 }
 
@@ -406,9 +344,6 @@ static void button_clicked_remove(GtkWidget *widget, gpointer data)
 
 	gtk_label_set_text(GTK_LABEL(data), gtk_entry_get_text(GTK_ENTRY(rm_f_entry)));
 	strncpy(friendname, gtk_label_get_text(GTK_LABEL(data)), sizeof(friendname));
-#ifdef DEBUG
-	printf("Friend name to be removed: %s\n", friendname);
-#endif
 }
 
 static void button_clicked(GtkWidget *widget, gpointer data)
@@ -418,9 +353,6 @@ static void button_clicked(GtkWidget *widget, gpointer data)
 	gtk_label_set_text(GTK_LABEL(data), gtk_entry_get_text(GTK_ENTRY(entry)));
 	strncpy(name, gtk_label_get_text(GTK_LABEL(data)), sizeof(name));
 	strncpy(username, gtk_label_get_text(GTK_LABEL(data)), sizeof(username));
-#ifdef DEBUG
-	printf("Your New Username is: %s\n", name);
-#endif
 }
 
 static void button_clicked2(GtkWidget *widget, gpointer data)
@@ -429,16 +361,10 @@ static void button_clicked2(GtkWidget *widget, gpointer data)
 	password[0] = '\0';
 	gtk_label_set_text(GTK_LABEL(data), gtk_entry_get_text(GTK_ENTRY(entry2)));
 	strncpy(password, gtk_label_get_text(GTK_LABEL(data)), sizeof(password));
-#ifdef DEBUG
-	printf("Inside button click 2 password function: \n");
-#endif
 	strcat(name, " ");
 	strcat(name, password);
 	LogInFlag = 1;
 
-#ifdef DEBUG
-	printf("Inside LogIn button, LogInflag is : %d\n", LogInFlag);
-#endif
 }
 static void button_clicked_register(GtkWidget *widget, gpointer data)
 {
@@ -446,9 +372,6 @@ static void button_clicked_register(GtkWidget *widget, gpointer data)
 	name[0] = '\0';
 	gtk_label_set_text(GTK_LABEL(data), gtk_entry_get_text(GTK_ENTRY(entry)));
 	strncpy(name, gtk_label_get_text(GTK_LABEL(data)), sizeof(name));
-#ifdef DEBUG
-	printf("Your New Username is: %s\n", name);
-#endif
 }
 
 static void button_clicked_register2(GtkWidget *widget, gpointer data)
@@ -457,15 +380,9 @@ static void button_clicked_register2(GtkWidget *widget, gpointer data)
 	password[0] = '\0';
 	gtk_label_set_text(GTK_LABEL(data), gtk_entry_get_text(GTK_ENTRY(entry2)));
 	strncpy(password, gtk_label_get_text(GTK_LABEL(data)), sizeof(password));
-#ifdef DEBUG
-	printf("Your New Password is: %s\n", password);
-#endif
 	strcat(name, " ");
 	strcat(name, password);
 	RegFlag = 1;
-#ifdef DEBUG
-	printf("Inside Reg button, regflag is : %d\n", RegFlag);
-#endif
 }
 
 void UpdateWindow(void)
@@ -515,14 +432,10 @@ static void update_invalid_label()
 		gtk_label_set_text(GTK_LABEL(invalid_label), "Success!");
 		FriendFlag = 1;
 	}
-#ifdef DEBUG
-	printf("friendflag is %d\n", FriendFlag);
-#endif
 }
 
 // Notebook Functions
-static void remove_book(GtkButton *button,
-						GtkNotebook *notebook)
+static void remove_book(GtkButton *button, GtkNotebook *notebook)
 {
 	gint page;
 
@@ -545,17 +458,8 @@ void currenttime(void)
 /*This */
 void CreateWindow()
 {
-#ifdef DEBUG
-	printf("inside update window: SignINvalid is %d SignUPvalid is %d\n", signInvalid, signUpvalid);
-	printf("friend flag inside create window is %d\n", FriendFlag);
-#endif
 	if ((ChatFlag == 0) && (FriendFlag == 0) && (Window == NULL))
 	{
-#ifdef DEBUG
-		printf("LOGIN\n");
-		printf("Inside createWindow fucntion checkpoint\n");
-		printf("username: %s, password: %s\n", name, password);
-#endif
 		if (FriendWindow != NULL)
 		{
 			gtk_widget_destroy((FriendWindow));
@@ -587,9 +491,6 @@ void CreateWindow()
 			gtk_widget_destroy((ChatWindow));
 			ChatWindow = NULL;
 		}
-#ifdef DEBUG
-		printf("F_EntryWindow = %d\n", F_EntryWindow);
-#endif
 		FriendWindow = Friend_List();
 		gtk_widget_show_all(FriendWindow);
 	}
@@ -666,9 +567,6 @@ GtkWidget *Login_Window()
 	gtk_box_pack_start(GTK_BOX(vbox), hbutton_box, 2, 0, 0);
 	gtk_container_add(GTK_CONTAINER(window), vbox);
 
-#ifdef DEBUG
-	printf("inside log=in window function\n");
-#endif
 	return (window);
 }
 
@@ -789,10 +687,6 @@ GtkWidget *Chat_Window()
 
 GtkWidget *Friend_List()
 {
-	// gtk_init(argc, argv);
-#ifdef DEBUG
-	printf("inside friendlist function\n");
-#endif
 	GtkWidget *window, *button, *label, *scroll_window, *vbox, *table;
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window), 260, 300);
@@ -809,14 +703,8 @@ GtkWidget *Friend_List()
 	char *tempf = strtok(fl, " ");
 	while (j < 10)
 	{
-#ifdef DEBUG
-		printf("friendlist is this inside gtk: %s\n", tempf);
-#endif
 		FriendL[j] = tempf;
 		tempf = strtok(NULL, " ");
-#ifdef DEBUG
-		printf("Friend name is %s at %d\n", FriendL[j], j);
-#endif
 		j++;
 	}
 	char *MessageFF = NULL;
@@ -831,9 +719,6 @@ GtkWidget *Friend_List()
 		{
 			MessageFF = "No Friend";
 		}
-#ifdef DEBUG
-		printf("Friend name is %s at %d\n", FriendL[i], i);
-#endif
 		// Fills Buttons With Friend List
 		button = gtk_button_new_with_label(MessageFF);
 		strcpy(contacts[i], MessageFF);
@@ -942,17 +827,10 @@ GtkWidget *Remove_Friend_Window()
 int main(int argc, char *argv[])
 {
 	gtk_init(&argc, &argv);
-
-#ifdef DEBUG
-	printf("%s: Starting...\n", argv[0]);
-#endif
 	CreateSocket(argc, argv, &SocketFD, SendBuf, RecvBuf);
-#ifdef DEBUG
-	printf("after creatsocket\n");
-	printf("socket creation completed in main\n");
-#endif
 	login_window = NULL;
 	CreateWindow();
+
 	while (loop)
 	{
 		UpdateWindow();

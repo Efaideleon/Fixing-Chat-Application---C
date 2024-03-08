@@ -189,9 +189,19 @@ void CloseServer(char *SendBuf, char *RecvBuf, int SocketFD)
 	PingServer(Message, RecvBuf, SocketFD);
 }
 
-// int main(int argc, char *argv[]) {
-//	return 0;
-// }
+/**
+ * @brief Creates a socket and connects to the server.
+ *
+ * This function takes the command-line arguments, creates a socket, and attempts to connect to the server at the specified hostname and port.
+ *
+ * @param argc Number of command-line arguments.
+ * @param argv Array of command-line arguments.
+ * @param SocketFD Pointer to an integer where the socket file descriptor will be stored.
+ * @param RecvBuf Buffer to be used for receiving data from the server.
+ * @param SendBuf Buffer to be used for sending data to the server.
+ *
+ * @return void
+ */
 void CreateSocket(int argc, char *argv[], int *SocketFD, char *RecvBuf, char *SendBuf)
 {
 	int PortNo;
@@ -241,41 +251,3 @@ void CreateSocket(int argc, char *argv[], int *SocketFD, char *RecvBuf, char *Se
 	printf("socket creation completed inside testclient\n");
 #endif
 }
-
-/*
-********** Client Loop **********
-	do {
-		printf("%s: enter a message to send to the server,\n"
-			"         or 'bye' to quit this client,\n"
-			"         or 'shutdown' to quit both server and client,\n"
-			"	  or 'SignUp' to sign up a new user,\n"
-			"	  or 'SignIn' if you already have an account and wish to sign in,\n"
-			"message: ", argv[0]);
-		fgets(SendBuf, sizeof(SendBuf), stdin);
-
-		l = strlen(SendBuf);
-		if (SendBuf[l - 1] == '\n')
-		{
-			SendBuf[--l] = 0;
-		}
-		if (strcmp ("SignUp", SendBuf) == 0)
-		{
-			PingServer (SendBuf, RecvBuf, SocketFD);
-		}
-		else if (strcmp("bye", SendBuf) == 0) {
-			CloseClient(SendBuf, RecvBuf, SocketFD);
-			Shutdown = 1;
-		}
-		else if (strcmp("shutdown", SendBuf) == 0) {
-			CloseServer(SendBuf, RecvBuf, SocketFD);
-			Shutdown = 0;
-		}
-		else {
-			SendMessage(SendBuf, RecvBuf, SocketFD);
-		}
-
-	} while (Shutdown == 0);
-`	printf("%s: Exiting...\n", argv[0]);
-	close(SocketFD);
-	return 0;
-}*/

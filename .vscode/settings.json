@@ -7,7 +7,21 @@
         "select.h": "c",
         "globaldefs.h": "c",
         "time.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "gtk.h": "c",
+        "glib.h": "c",
+        "gtkcellrenderertoggle.h": "c",
+        "gtkcellrenderertext.h": "c",
+        "gtkcellrendererspinner.h": "c",
+        "gtkcellrendererspin.h": "c",
+        "gtkcontainer.h": "c",
+        "gtkdebug.h": "c",
+        "gtkdnd.h": "c",
+        "gtkeditable.h": "c",
+        "gtkentry.h": "c",
+        "stdlib.h": "c",
+        "testclient.h": "c",
+        "user.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
