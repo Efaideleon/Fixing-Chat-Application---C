@@ -176,11 +176,11 @@ button_clicked_remove(data, rm_f_entry, friend_name)
 
 ---
 
-* LoginWindowUI
-* FriendListUI
-* ChatWindowUI
-* FriendRequesWidgetUI
-* RemoveFriendWidgetUI
+* **LoginWindowUI**
+* **FriendListUI**
+* **ChatWindowUI**
+* **FriendRequesWidgetUI**
+* **RemoveFriendWidgetUI**
 
 
 ## Credential Service
