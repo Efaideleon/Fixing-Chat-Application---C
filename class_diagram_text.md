@@ -22,19 +22,19 @@ The GUI's main functionality is to show the login window so that the user can lo
 
 ### Attributes
 
-* window
-* vbox
-* label
-* label2
-* label3
-* button
-* button2
-* button3
-* hbutton_box
-* hpaned
-* buffer
-* buffer2
-* table
+* window       : GtkWidget*
+* vbox         : GtkWidget*
+* label        : GtkWidget*
+* label2       : GtkWidget*
+* label3       : GtkWidget*
+* button       : GtkWidget*
+* button2      : GtkWidget*
+* button3      : GtkWidget*
+* hbutton_box  : GtkWidget*
+* hpaned       : GtkWidget*
+* buffer       : GtkEntryBufffer*
+* buffer2      : GtkEntryBugger*
+* table        : GtkWidget*
 
 ### Attribute Dependecies
 
@@ -61,14 +61,14 @@ close_program() // sets loop boolean to 0
 
 ### Attributes
 
-* window
-* scrolled_window
-* button
-* table
-* label
-* text_area
-* bugger
-* message_label
+* window            : GtkWidget*       
+* scrolled_window   : GtkWidget*
+* button            : GtkWidget*
+* table             : GtkWidget*
+* label             : GtkWidget*
+* text_area         : GtkWidget*
+* buffer            : GtkEntryBuffer*
+* message_label     : GtkWidget*
 
 ### Attribute Dependencies
 
@@ -95,12 +95,12 @@ remove_book(notebook) // forces the widget to redraw itself
 
 ### Attributes
 
-* window
-* button
-* label
-* scroll_window
-* vbox
-* table 
+* window        : GtkWidget*
+* button        : GtkWidget*
+* label         : GtkWidget*
+* scroll_window : GtkWidget*
+* vbox          : GtkWidget*
+* table         : GtkWidget*   
 
 ### Attribute Dependencies
 
@@ -125,10 +125,10 @@ delete_friend_window() // set FriendFlag to 0 to show that its inactive
 
 ### Attributes
 
-* button
-* label
-* vbox
-* label2
+* button    : GtkWidget*
+* label     : GtkWidget*
+* vbox      : GtkWidget*
+* label2    : GtkWidget*
 
 ### Attribute Dependencies
 
@@ -150,10 +150,10 @@ button_clicked_add(data, add_f_entry, friendname, add_to, SocketFD, (func) SendM
 
 ### Attributes
 
-* button
-* label
-* hbox
-* label2
+* button    : GtkWidget*
+* label     : GtkWidget*
+* hbox      : GtkWidget*
+* label2    : GtkWidget*
 
 ### Attribute Dependencies
 
@@ -187,31 +187,31 @@ button_clicked_remove(data, rm_f_entry, friend_name)
 
 ### Attributes
 
-* username
-* name
-* password
-* LogInFlag
-* RefFlag
-* signUpValid
-* SignUp
-* RegFlag
+* username      : char
+* name          : char*
+* password      : char*
+* LogInFlag     : int
+* RefFlag       : int
+* signUpValid   : int
+* SignUp        : int
+* RegFlag       : int
 
 ### Methods
 
 ```c
-button_clicked(data, (G) entry, (G) username, (G) name) // get the username from the entry box and store it in a variable
-button_clicked2(data, (G) password, entry2, (G) LogInFlag) // get the password from the entry box and store it in a variable
-check_credentials((G) RefFlag, (G) name, (G) signUpvalid, (G) RecvBuf, (func) SignUp, (func) update_invalid_label, (func) SignIn, (func) FriendList) // check if the username can be registered, and check if username and password are correct
-button_clicked_register((G) name, data, (G) entry) // stores the username in the name buffer when register button is clicked
-button_clicked_register2((G) password, data,(G) entry2,(G) RegFlag) // stores the password in the password buffer when the register button is clicked
+void button_clicked(gpointer data, (G) GtkWidget* entry, (G) char username, (G) char* name) // get the username from the entry box and store it in a variable
+button_clicked2(gpointer data, (G) char* password, GtkWidget* entry2, (G) int LogInFlag) // get the password from the entry box and store it in a variable
+check_credentials((G) int RefFlag, (G) char* name, (G) int signUpvalid, (G) char [] RecvBuf, (func) int SignUp, (func) void update_invalid_label, (func) int SignIn, (func) char* FriendList) // check if the username can be registered, and check if username and password are correct
+button_clicked_register((G) char* name, gpointer data, (G) GtkWidget* entry) // stores the username in the name buffer when register button is clicked
+button_clicked_register2((G) char* password, gpointer data,(G) GtkWidget* entry2,(G) int RegFlag) // stores the password in the password buffer when the register button is clicked
 ```
 
 ### Attribute Dependencies
 
-* data
-* entry2
-* RecvBug
-* entry
+* data      : gpointer
+* entry2    : GtkWidget*
+* RecvBuf   : char[]
+* entry     : GtkWidget*
 
 ### Method Dependencies
 
@@ -228,26 +228,26 @@ FriendList()
 
 ### Attributes
 
-* message
-* sent_message
-* message_buffer
-* st
-* OpenDialog
+* message           : GtkWidget*
+* sent_message      : char[]
+* message_buffer    : GtkTextBuffer*[]
+* st                : char[]
+* OpenDialog        : int
 
 ### Methods
 
 ```c
-send_message(data, (G) message, (G) sent_message, (G) message_buffer, (G) contacts, (G) SocketFD, (G) st, (func) SendMessage) // gets the message from the text entry box in the chat window and calls SendMessage
-request_message((G) ChatWindow, (G) contacts, (G) username, (G) notebook, (G) SocketFD, (G)OpenDialog, (G) message_buffer, (func) SendMessage, (func) read_compare, (func) open_dialog) //retrieves message from the server
+send_message(gpointer data, (G) GtkWidget* message, (G) char [] sent_message, (G) GtkTextBuffer* [] message_buffer, (G) char [][] contacts, (G) int SocketFD, (G) char[] st, (func) void SendMessage) // gets the message from the text entry box in the chat window and calls SendMessage
+request_message((G) GtkWidget* ChatWindow, (G) char[][] contacts, (G) char[] username, (G) GtkWidget* notebook, (G) int SocketFD, (G) int OpenDialog, (G) GtkTextBuffer* [] message_buffer, (func) void SendMessage, (func) int read_compare, (func) void open_dialog) //retrieves message from the server
 ```
 
 ### Attribute Dependencies
 
-* data
-* SocketFD
-* ChatWindow
-* contacts
-* notebook
+* data          : gpointer
+* SocketFD      : int
+* ChatWindow    : GtkWidget*
+* contacts      : char[][]
+* notebook      : GtkWidget*
 
 ### Method Dependencies
 
@@ -263,30 +263,27 @@ open_dialog()
 
 ### Attributes
 
-* ChatFlag
-* FriendFlag
-* Window
-* FriendWindow
-* RemoveFriendWindow
-* AddFriendWindow
+* ChatFlag              : int
+* FriendFlag            : int
+* Window                : GtkWidget*
+* FriendWindow          : GtkWidget*
+* RemoveFriendWindow    : GtkWidget*
+* AddFriendWindow       : GtkWidget*
 
 ### Methods
 
 ```c
 create_friend_window() // sets flag to create friend window
-CreateWindow((G) ChatFlag, (G) FriendFlag, (G) Window, (G) FriendWindow, (func/class) Login_Window, (G) ChatWindow, (func/class) Chat_Window(), (func/class) Friend_List) // determines which window to create and destroy based on the flags
+CreateWindow((G) int ChatFlag, (G) int FriendFlag, (G) GtkWidget* Window, (G) GtkWidget* FriendWindow, (func/class) GtkWidget* Login_Window, (G) GtkWidget* ChatWindow, (func/class) GtkWidget* Chat_Window(), (func/class) GtkWidget* Friend_List) // determines which window to create and destroy based on the flags
 delete_chat_window() // sets flag to delete chat window
 close_friend_window() // set Friendflag to 0 to show that its inactive
 create_chat_window() // set ChatFlag to 1 for active
 delete_friend_window() // set FriendFlag to 0 to show that its inactive
-Delete_Friend_Entry2((G) RemoveFriendWindow) // destroys the RemoveFriendWindow widget
-Delete_Friend_Entry((G) AddFriendWindow) // destroys the AddFriendWindow widget
+Delete_Friend_Entry2((G) GtkWidget* RemoveFriendWindow) // destroys the RemoveFriendWindow widget
+Delete_Friend_Entry((G) GtkWidget* AddFriendWindow) // destroys the AddFriendWindow widget
 ```
 
 ### Attribute Dependencies
-
-* RemoveFriendWindow
-* AddFriendWindow
 
 ### Method Dependencies
 
@@ -302,30 +299,30 @@ Friend_List() // class
 
 ### Attributes
 
-* FriendL
-* contacts
-* add_to
-* friendname
-* add_f_entry
-* rm_f_entry
-* friend_name
+* FriendL       : char*
+* contacts      : char[][]
+* add_to        : char[]
+* friendname    : char[]
+* add_f_entry   : GtkWidget*
+* rm_f_entry    : GtkWidget*
+* friend_name   : char[]
 
 ### Methods
 
 ```c
-accept_friend((func) SendMessage, (G) SocketFD, (G) OpenDialog) // sends message to the server with acceptrequest
+accept_friend((func) void SendMessage, (G) int SocketFD, (G) int OpenDialog) // sends message to the server with acceptrequest
 (func/Class) Remove_Friend_Window
 (func/Class) Add_Friend_Window
-update_contact_list((func/class) Friend_List, (G) FriendL, (G) contacts, data) // refreshes the friend list with new friends or replaces it with No friend
-button_clicked_add(data, (G) add_f_entry, (G) friendname, (G) add_to, (G) SocketFD, (func) SendMessage) // when accept friend button is pressed send: addto 'friendname'
-button_clicked_remove(data, (G) rm_f_entry, (G) friend_name)
+update_contact_list((func/class) GtkWidget* Friend_List, (G) char* FriendL, (G) char[][] contacts, gpointer data) // refreshes the friend list with new friends or replaces it with No friend
+button_clicked_add(gpointer data, (G) GtkWidget* add_f_entry, (G) char[] friendname, (G) char[] add_to, (G) int SocketFD, (func) void SendMessage) // when accept friend button is pressed send: addto 'friendname'
+button_clicked_remove(gpointer data, (G) GtkWidget* rm_f_entry, (G) char[] friend_name)
 ```
 
 ### Attribute Dependencies
 
-* OpenDialog
-* contacs
-* SocketFD
+* OpenDialog : int
+* contacs    : char[][]
+* SocketFD   : int
 
 ### Function Dependencies
 
@@ -339,9 +336,9 @@ SendMessage()
 
 ### Attributes
 
-* RecvBuf
-* SendBuf
-* SocketFD
+* RecvBuf  : char[]
+* SendBuf  : char[]
+* SocketFD : int
 
 ---
 
