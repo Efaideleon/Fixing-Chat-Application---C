@@ -40,17 +40,21 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
     login_window_ui->button3 = gtk_button_new_with_label("Quit");
 
     // Button Clicks For Login
-    CredentialsData *credentials_data = g_new(CredentialsData, 1); //remember to free using g_free()
+
+    CredentialsData *credentials_data = g_new(CredentialsData, 1); // remember to free using g_free()
     credentials_data->credential_service = credential_service;
 
     credentials_data->data = login_window_ui->entry;
-    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(button_clicked), credentials_data);
+    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(get_name_and_usermane), credentials_data);
 
     credentials_data->data = login_window_ui->entry2;
-    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(button_clicked2),credentials_data);
+    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(get_password), credentials_data);
 
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(create_friend_window), NULL);
-    // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(check_credentials), NULL);
+
+    // credentials_data->data = NULL;
+    // g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(check_credentials), NULL);
+
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(CreateWindow), NULL);
 
     // Button Clicks for Register
@@ -70,3 +74,63 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
     gtk_box_pack_start(GTK_BOX(login_window_ui->vbox), login_window_ui->hbutton_box, 2, 0, 0);
     gtk_container_add(GTK_CONTAINER(login_window_ui->window), login_window_ui->vbox);
 }
+
+// Helper Structs
+
+typedef struct
+{
+    GtkWidget *data;
+    CredentialService *credential_service;
+} CredentialsData;
+
+// Helper Functions
+
+/**
+ * @brief
+ * Proxy function to call button_clicked from CredentialSerivce.c 
+ * @param widget Must be initialized with gtk_entry_new();
+ * @param data Must be of type CredentialsData initialized with g_new()
+ */
+void get_name_and_usermane(GtkWidget *, gpointer data)
+{
+    CredentialsData *credentials_data = (CredentialsData *)data;
+
+    GtkWidget *temp_data = gtk_label_new("");
+    gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(credentials_data->data)));
+    
+    int NAME_SIZE = sizeof(credentials_data->credential_service->name);
+    int USERNAME_SIZE = sizeof(credentials_data->credential_service->username);
+ 
+    char name[NAME_SIZE];
+    char username[USERNAME_SIZE];
+    strncpy(name, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(name));
+    strncpy(username, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(username));
+    button_clicked(credentials_data->credential_service, name, username);
+}
+
+/**
+ * @brief
+ * Proxy function to call button_clicked2 from CredentialService.c
+ * @param widget Must be initialized with gtk_entry_new();
+ * @param data Must be of type CredentialsData initialized with g_new()
+ */
+void get_password(GtkWidget *widget, gpointer data)
+{
+    CredentialsData *credentials_data = (CredentialsData *)data;
+
+    GtkWidget *temp_data = gtk_label_new("");
+    gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(credentials_data->data)));
+    
+    int PASS_SIZE = sizeof(credentials_data->credential_service->password);
+
+    char password[PASS_SIZE];
+    strncpy(password, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(password));
+    button_clicked2(credentials_data->credential_service, password);
+}
+
+/**
+ * @brief Void function for signin signup validation
+ * @param widget NULL
+ * @param data Must be of type CredentialsData initiazlied with g_new()
+ */
+void check_login_credentials(GtkWidget *widget, gpointer data);

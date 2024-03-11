@@ -2,7 +2,7 @@
 #define CREDENTIAL_SERVICE_HEADER
 
 #include <stdlib.h>
-#include "gtk/gtk.h"
+// #include "gtk/gtk.h"
 
 typedef struct
 {
@@ -10,40 +10,34 @@ typedef struct
     char name[50];
     char password[50];
     int LogInFlag;
-    int RefFlag;
-    int signUpValid;
+    int signUpvalid;
     int SignUp;
     int RegFlag;
+    NetworkService *network_service;
 } CredentialService;
 
-typedef struct
-{
-    GtkWidget *data;
-    CredentialService *credential_service;
-} CredentialsData;
-
 /**
- * @brief 
+ * @brief
  * stores the name and username from data to credentialservice
- * @param widget Must be initialized with gtk_entry_new(); 
- * @param data Must be of type CredentialsData
+ * @param credential_serivce
  */
-void button_clicked(GtkWidget *widget, gpointer data);
+void button_clicked(CredentialService *credential_serivce, char *name, char *username);
 
 /**
- * @brief 
+ * @brief
  * Stores the password from data to CredentialService
  * and sets the LogInFlag to 1 so that the user can attempt to login
- * @param widget Must be initialized with gtk_entry_new();
- * @param data Must be of type CredentialsData
+ * @param credential_service
  */
-void button_clicked2(GtkWidget *widget, gpointer data);
+void button_clicked2(CredentialService *credential_service, char *password);
 
 /**
  * @brief Void function for signin signup validation
- * 
+ *
+ * @param credential_service
  */
-void check_credentials(void);
+void check_credentials(CredentialService *credential_service);
+
 void button_clicked_register();
 void button_clicked_register2();
 
