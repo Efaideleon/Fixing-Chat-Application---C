@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     gtk_init(&argc, &argv);
-    NetworkService network_service;
+    // NetworkService network_service;
     CredentialService credential_service;
     LoginWindowUI login_window_ui;
     create_login_window_ui(&login_window_ui, &credential_service);

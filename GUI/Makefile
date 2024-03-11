@@ -2,7 +2,7 @@
 GTKINC = `pkg-config --cflags gtk+-2.0`
 GTKLIBS = `pkg-config --libs gtk+-2.0`
 
-CC = gcc
+CC = gcc -Wno-deprecated-declarations # -Wno-deprecated-declarations: disables deprecated warnings from gtk
 CFLAGS = -Wall -ansi -std=c99 $(GTKINC)
 LFLAGS = -Wall -ansi -std=c99 $(GTKLIBS)
 
