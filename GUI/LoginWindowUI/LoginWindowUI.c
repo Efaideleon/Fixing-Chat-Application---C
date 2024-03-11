@@ -41,10 +41,14 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
 
     // Button Clicks For Login
     CredentialsData *credentials_data = g_new(CredentialsData, 1); //remember to free using g_free()
-    credentials_data->data = login_window_ui->entry;
     credentials_data->credential_service = credential_service;
-     g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(button_clicked), credentials_data);
-    // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(.button_clicked2),login_window_ui.label2);
+
+    credentials_data->data = login_window_ui->entry;
+    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(button_clicked), credentials_data);
+
+    credentials_data->data = login_window_ui->entry2;
+    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(button_clicked2),credentials_data);
+
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(create_friend_window), NULL);
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(check_credentials), NULL);
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(CreateWindow), NULL);

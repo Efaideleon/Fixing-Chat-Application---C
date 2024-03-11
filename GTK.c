@@ -36,6 +36,7 @@ GtkWidget *friend_invalid_label;
 char st[500];
 char add_to[40];
 // Function Prototypes
+
 static void button_clicked2(GtkWidget *widget, gpointer data);
 static void button_clicked(GtkWidget *widget, gpointer data);
 static void button_clicked_register(GtkWidget *widget, gpointer data);
