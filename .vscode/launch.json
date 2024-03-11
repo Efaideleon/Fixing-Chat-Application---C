@@ -1,25 +1,12 @@
 {
     "version": "0.2.0",
     "configurations": [
-        // {
-            // "name": "/C++: gcc build aCnd debug active file",
-            // "type": "cppdbg",
-            // "request": "launch",
-            // "program": "${fileDirname}/${fileBasenameNoExtension}",
-            // "args": [],
-            // "stopAtEntry": false,
-            // "cwd": "${fileDirname}",
-            // "environment": [],
-            // "externalConsole": false,
-            // "MIMode": "lldb",
-            // "preLaunchTask": "run the makefile"
-        // },
         {
             "name": "Debug Server",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/ChatServer",
-            "cwd": "${workspaceFolder}/",
+            "program": "${workspaceFolder}/ChatServer", // directory location of executable
+            "cwd": "${workspaceFolder}/",  // directory location of makefile
             "preLaunchTask": "build-server",
             "MIMode": "lldb",
             "args": ["3003"]
@@ -33,6 +20,16 @@
             "preLaunchTask": "build-client",
             "MIMode": "lldb",
             "args": ["localhost", "3003"]
+        },
+        {
+            "name": "Debug guiapp",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/GUI/guiapp",
+            "cwd": "${workspaceFolder}/GUI",
+            "preLaunchTask": "build-guiapp",
+            "MIMode": "lldb",
+            "args": []
         }
     ]
 }

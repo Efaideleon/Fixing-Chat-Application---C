@@ -21,7 +21,9 @@
         "gtkentry.h": "c",
         "stdlib.h": "c",
         "testclient.h": "c",
-        "user.h": "c"
+        "user.h": "c",
+        "credentialservice.h": "c",
+        "loginwindowui.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

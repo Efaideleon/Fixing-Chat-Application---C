@@ -27,14 +27,21 @@ The GUI's main functionality is to show the login window so that the user can lo
 * label        : GtkWidget*
 * label2       : GtkWidget*
 * label3       : GtkWidget*
+* invalid_label: GtkWidget*
 * button       : GtkWidget*
 * button2      : GtkWidget*
 * button3      : GtkWidget*
 * hbutton_box  : GtkWidget*
 * hpaned       : GtkWidget*
-* buffer       : GtkEntryBufffer*
-* buffer2      : GtkEntryBugger*
+* buffer       : GtkEntryBuffer*
+* buffer2      : GtkEntryBuffer*
 * table        : GtkWidget*
+* entry        : GtkWidget*
+* entry2       : GtkWidget*
+
+### Methods
+
+* update_invalid_label()
 
 ### Attribute Dependecies
 
@@ -61,7 +68,7 @@ close_program() // sets loop boolean to 0
 
 ### Attributes
 
-* window            : GtkWidget*       
+* window            : GtkWidget*
 * scrolled_window   : GtkWidget*
 * button            : GtkWidget*
 * table             : GtkWidget*
@@ -353,6 +360,7 @@ remove_book((G) notebook) // forces the widget to redraw itself
 ```
 ---
 
-*Notes*
+>*Notes*
+>* (G) - stands for global variable
 
-* (G) - stands for global variable
+---
