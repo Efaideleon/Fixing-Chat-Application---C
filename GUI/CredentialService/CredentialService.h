@@ -6,8 +6,8 @@
 
 typedef struct
 {
-    char username;
-    char *name;
+    char username[50];
+    char name[50];
     char *password;
     int LogInFlag;
     int RefFlag;
@@ -16,7 +16,13 @@ typedef struct
     int RegFlag;
 } CredentialService;
 
-void button_clicked();
+typedef struct
+{
+    GtkWidget *data;
+    CredentialService *credential_service;
+} CredentialsData;
+
+void button_clicked(GtkWidget *widget, gpointer data);
 void button_clicked2();
 void check_credentials();
 void button_clicked_register();

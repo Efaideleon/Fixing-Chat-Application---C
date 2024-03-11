@@ -39,9 +39,11 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
     login_window_ui->button2 = gtk_button_new_with_label("Register");
     login_window_ui->button3 = gtk_button_new_with_label("Quit");
 
-    // testing
     // Button Clicks For Login
-    // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(button_clicked),login_window_ui.label3);
+    CredentialsData *credentials_data = g_new(CredentialsData, 1); //remember to free using g_free()
+    credentials_data->data = login_window_ui->entry;
+    credentials_data->credential_service = credential_service;
+     g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(button_clicked), credentials_data);
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(.button_clicked2),login_window_ui.label2);
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(create_friend_window), NULL);
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(check_credentials), NULL);
