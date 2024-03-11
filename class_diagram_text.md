@@ -202,6 +202,7 @@ button_clicked_remove(data, rm_f_entry, friend_name)
 * signUpValid   : int
 * SignUp        : int
 * RegFlag       : int
+* credentials_data : struct CredentialsData
 
 ### Methods
 
