@@ -1,67 +1,59 @@
 #include "CredentialService.h"
 
-void button_clicked(GtkWidget *widget, gpointer data)
+void button_clicked(CredentialService *credential_service, char *name, char *username)
 {
-    CredentialsData *credentials_data = (CredentialsData *)data;
-
-    GtkWidget *temp_data = gtk_label_new("");
-    gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(credentials_data->data)));
-
-    strncpy(credentials_data->credential_service->name, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(credentials_data->credential_service->name));
-    strncpy(credentials_data->credential_service->username, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(credentials_data->credential_service->username));
+    strncpy(credential_service->name, name, sizeof(credential_service->name));
+    strncpy(credential_service->username, username, sizeof(username));
 }
 
-void button_clicked2(GtkWidget *widget, gpointer data)
+void button_clicked2(CredentialService *credential_service, char *password)
 {
-    CredentialsData *credentials_data = (CredentialsData *)data;
+    strncpy(credential_service->password, password, sizeof(credential_service->password));
+    strcat(credential_service->name, " ");
+    strcat(credential_service->name, credential_service->password);
 
-    GtkWidget *temp_data = gtk_label_new("");
-    gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(credentials_data->data)));
-
-    strncpy(credentials_data->credential_service->password, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(credentials_data->credential_service->password));
-    strcat(credentials_data->credential_service->name, " ");
-    strcat(credentials_data->credential_service->name,credentials_data->credential_service->password);
-
-    credentials_data->credential_service->LogInFlag = 1;
+    credential_service->LogInFlag = 1;
 }
 
-void check_credentials(void)
-{
-	if (RegFlag != 0 && name != NULL)
-	{
+// void check_credentials(GtkWidget *widget, gpointer data)
+// {
+//     CredentialsData *credentials_data = (CredentialsData *)data;
+// 	if (credentials_data->credential_service->RegFlag != 0 && credentials_data->credential_service->name != NULL)
+// 	{
 
-		signUpvalid = SignUp(name, RecvBuf, SocketFD);
-		RegFlag = 0;
-		if (signUpvalid == TRUE)
-		{
-			signInvalid = TRUE;
-			update_invalid_label();
-		}
-		else if (signInvalid == FALSE)
-		{
-			signInvalid = FALSE;
-			update_invalid_label();
-		}
-	}
-	if (LogInFlag != 0 && name != NULL)
-	{
-		signInvalid = SignIn(name, RecvBuf, SocketFD);
-		fl = malloc(30 * sizeof(char));
-		fl[0] = '\0';
-		strcat(fl, FriendList());
-		if (fl != NULL)
-		{
-			printf("fl is %s\n", fl);
-		}
-		LogInFlag = 0;
-		if (signInvalid == TRUE)
-		{
-			signUpvalid = TRUE;
-			update_invalid_label();
-		}
-		else if (signInvalid == FALSE)
-		{
-			signUpvalid = FALSE;
-			update_invalid_label();
-		}
-}
+// 		credentials_data->credential_service->signUpvalid = SignUp(credentials_data->credential_service->name, credentials_data->credential_service->network_service->RecvBuf,credentials_data->credential_service->network_service->SocketFD);
+// 		credentials_data->credential_service->RegFlag = 0;
+// 		if ( signUpvalid == TRUE)
+// 		{
+// 			signInvalid = TRUE;
+// 			update_invalid_label();
+// 		}
+// 		else if (signInvalid == FALSE)
+// 		{
+// 			signInvalid = FALSE;
+// 			update_invalid_label();
+// 		}
+// 	}
+// 	if (LogInFlag != 0 && name != NULL)
+// 	{
+// 		signInvalid = SignIn(name, RecvBuf, SocketFD);
+// 		fl = malloc(30 * sizeof(char));
+// 		fl[0] = '\0';
+// 		strcat(fl, FriendList());
+// 		if (fl != NULL)
+// 		{
+// 			printf("fl is %s\n", fl);
+// 		}
+// 		LogInFlag = 0;
+// 		if (signInvalid == TRUE)
+// 		{
+// 			signUpvalid = TRUE;
+// 			update_invalid_label();
+// 		}
+// 		else if (signInvalid == FALSE)
+// 		{
+// 			signUpvalid = FALSE;
+// 			update_invalid_label();
+// 		}
+//     }
+// }
