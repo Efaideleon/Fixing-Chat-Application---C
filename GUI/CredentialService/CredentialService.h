@@ -22,6 +22,12 @@ typedef struct
     CredentialService *credential_service;
 } CredentialsData;
 
+/**
+ * @brief 
+ * Stores the name and username from data to CredentialService
+ * @param widget 
+ * @param data Must be of type CredentialsData
+ */
 void button_clicked(GtkWidget *widget, gpointer data);
 void button_clicked2();
 void check_credentials();
