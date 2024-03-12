@@ -52,8 +52,8 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
 
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(create_friend_window), NULL);
 
-    credentials_data->data = NULL;
-    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(check_credentials), NULL);
+    credentials_data->data = login_window_ui->invalid_label;
+    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(check_login_credentials), NULL);
 
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(CreateWindow), NULL);
 
@@ -133,53 +133,31 @@ void get_password(GtkWidget *widget, gpointer data)
  * @param widget NULL
  * @param data Must be of type CredentialsData initiazlied with g_new()
  */
-void check_login_credentials(GtkWidget *widget, gpointer data)
+int check_login_credentials(GtkWidget *widget, gpointer data)
 {
 
     CredentialsData *credentials_data = (CredentialsData *)data; 
-    CredentialService *credential_service_ptr = credentials_data->credential_service;
-    check_credentials(credential_service_ptr);
-
-    int *sign_up_valid_ptr = &credential_service_ptr->signUpvalid;
-    int *sign_in_valid_ptr = &credential_service_ptr->signInvalid;
-    int *reg_flag_ptr = &credential_service_ptr->RegFlag;
-    int *log_in_flag_ptr = &credential_service_ptr->LogInFlag;
-    char *name_ptr = &credential_service_ptr->name;
-
-    if (*reg_flag_ptr != 0 && *name_ptr != NULL)
-    {
-        if (*sign_up_valid_ptr == TRUE)
-        {
-            *sign_in_valid_ptr = TRUE;
-            update_invalid_label(); // BUG: still neeed to implement this
-        }
-        else if (*sign_in_valid_ptr == FALSE) // BUG: potential bug
-        {
-            *sign_in_valid_ptr = FALSE;
-            update_invalid_label();
-        }
-    }
-    if (*log_in_flag_ptr != 0 && *name_ptr != NULL)
-    {
-        if (*sign_in_valid_ptr == TRUE)
-        {
-            *sign_up_valid_ptr = TRUE;
-            update_invalid_label();
-        }
-        else if (*sign_in_valid_ptr == FALSE)
-        {
-            *sign_up_valid_ptr = FALSE;
-            update_invalid_label();
-        }
-    }
+    CredentialService *credential_service = credentials_data->credential_service;
+    GtkWidget *invalid_label = credentials_data->data;
+    int logged_in_flag = check_credentials(credential_service);
+    update_invalid_label(invalid_label, logged_in_flag);
 }
 
 /**
- * @brief STILL NEED TO IMPLEMENT
- * 
+ * @brief changes the gui label to show if credentials are valid or not  
+ * @param invalid_label 
+ * @param logged_in_flag 
  */
-void update_invalid_label(void)
+void update_invalid_label(GtkWidget* invalid_label, int logged_in_flag)
 {
+	if (!logged_in_flag)
+	{
+		gtk_label_set_text(GTK_LABEL(invalid_label), "invalid");
+	}
+	else
+	{
+		gtk_label_set_text(GTK_LABEL(invalid_label), "Success!");
+	}
 }
 
 

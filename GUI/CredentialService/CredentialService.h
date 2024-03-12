@@ -6,6 +6,9 @@
 
 // #include "gtk/gtk.h"
 
+#define TRUE 1 // BUG: This is supposed to be TRUE, Need to load globals
+#define FALSE 0
+
 typedef struct
 {
     char username[50];
@@ -39,7 +42,7 @@ void button_clicked2(CredentialService *credential_service, char *password);
  *
  * @param credential_service `CredentialService*`
  */
-void check_credentials(CredentialService *credential_service);
+int check_credentials(CredentialService *credential_service);
 
 void button_clicked_register();
 void button_clicked_register2();
