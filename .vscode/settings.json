@@ -23,7 +23,8 @@
         "testclient.h": "c",
         "user.h": "c",
         "credentialservice.h": "c",
-        "loginwindowui.h": "c"
+        "loginwindowui.h": "c",
+        "networkservice.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

@@ -203,6 +203,7 @@ button_clicked_remove(data, rm_f_entry, friend_name)
 * RegFlag       : int
 * credentials_data : struct CredentialsData
 * network_service : NetworkService
+* signInvalid   : int
 
 ### Methods
 
