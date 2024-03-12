@@ -43,25 +43,27 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
 
     CredentialsData *credentials_data = g_new(CredentialsData, 1); // remember to free using g_free()
     credentials_data->credential_service = credential_service;
+    credentials_data->entry_widget = login_window_ui->entry;
+    credentials_data->entry2_widget = login_window_ui->entry2;
+    credentials_data->invalid_label_widget = login_window_ui->invalid_label;
 
-    credentials_data->data = login_window_ui->entry;
-    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(get_name_and_usermane), credentials_data);
-
-    credentials_data->data = login_window_ui->entry2;
-    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(get_password), credentials_data);
+    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(get_name_and_password), credentials_data);
+    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(login_in_user), credentials_data);
 
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(create_friend_window), NULL);
 
-    credentials_data->data = login_window_ui->invalid_label;
     g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(check_login_credentials), NULL);
 
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(CreateWindow), NULL);
 
     // Button Clicks for Register
-    // g_signal_connect(login_window_ui.button2, "clicked", G_CALLBACK(button_clicked_register), label3);
-    // g_signal_connect(login_window_ui.button2, "clicked", G_CALLBACK(button_clicked_register2), label2);
+
+    g_signal_connect(login_window_ui->button2, "clicked", G_CALLBACK(get_name_and_password), credentials_data);
+    g_signal_connect(login_window_ui->button2, "clicked", G_CALLBACK(register_user), credentials_data);
+
     // g_signal_connect(login_window_ui.button2, "clicked", G_CALLBACK(create_friend_window), NULL);
-    // g_signal_connect(login_window_ui.button2, "clicked", G_CALLBACK(check_credentials), NULL);
+
+    g_signal_connect(login_window_ui->button2, "clicked", G_CALLBACK(check_login_credentials), NULL);
     // g_signal_connect(login_window_ui.button2, "clicked", G_CALLBACK(CreateWindow), NULL);
 
     // Button Clicks for Quit
@@ -79,85 +81,97 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
 
 typedef struct
 {
-    GtkWidget *data;
-    CredentialService *credential_service;
+    GtkWidget *entry_widget; // Entry widget where the user types username
+    GtkWidget *entry2_widget; // Entry widget where the user types password
+    GtkWidget *invalid_label_widget; // Label that indicates if the credentials are valid
+    CredentialService *credential_service; // Reference to CredentialService
+    char *name; // Cleaned username in char* form
+    char *password; // Cleaned passowrd in char* form
 } CredentialsData;
 
 // Helper Functions
 
 /**
- * @brief
- * Proxy function to call button_clicked from CredentialSerivce.c
- * @param widget Must be initialized with gtk_entry_new();
- * @param data Must be of type CredentialsData initialized with g_new()
+ * @brief Get the clean string from an entry widget 
+ * @param widget 
+ * @param size Size of the expect string
+ * @return char* 
  */
-void get_name_and_usermane(GtkWidget *, gpointer data)
+char *get_clean_string(GtkWidget *widget, int size)
 {
-    CredentialsData *credentials_data = (CredentialsData *)data;
-
-    GtkWidget *temp_data = gtk_label_new("");
-    gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(credentials_data->data)));
-
-    int NAME_SIZE = sizeof(credentials_data->credential_service->name);
-    int USERNAME_SIZE = sizeof(credentials_data->credential_service->username);
-
-    char name[NAME_SIZE];
-    char username[USERNAME_SIZE];
-    strncpy(name, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(name));
-    strncpy(username, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(username));
-    button_clicked(credentials_data->credential_service, name, username);
+    GtkWidget *temp_data = gtk_labe_new("");
+    char string[size];
+    gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(widget)));
+    strncpy(string, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(string));
+    return string;
 }
 
 /**
- * @brief
- * Proxy function to call button_clicked2 from CredentialService.c
- * @param widget Must be initialized with gtk_entry_new();
- * @param data Must be of type CredentialsData initialized with g_new()
+ * @brief Get the name and password and load it into the CredentialsData
+ * @param widget 
+ * @param data `CredentialsData*`
  */
-void get_password(GtkWidget *widget, gpointer data)
+void get_name_and_password(GtkWidget *widget, gpointer data)
 {
     CredentialsData *credentials_data = (CredentialsData *)data;
+    credentials_data->name = get_clean_string(credentials_data->entry_widget, sizeof(credentials_data->credential_service->name));
 
-    GtkWidget *temp_data = gtk_label_new("");
-    gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(credentials_data->data)));
-
-    int PASS_SIZE = sizeof(credentials_data->credential_service->password);
-
-    char password[PASS_SIZE];
-    strncpy(password, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(password));
-    button_clicked2(credentials_data->credential_service, password);
+    credentials_data->password = get_clean_string(credentials_data->entry2_widget, sizeof(credentials_data->credential_service->password));
 }
+
+/**
+ * @brief Proxy to call `button_clicked()` and `button_clicked` from `CredentialService`
+ * @param widget 
+ * @param data `CredentialsData*`
+ */
+void login_in_user(GtkWidget *widget, gpointer data)
+{
+    CredentialsData *credentials_data = (CredentialsData *)data;
+    button_clicked(credentials_data->credential_service, credentials_data->name, credentials_data->name);
+    button_clicked2(credentials_data->credential_service, credentials_data->password);
+}
+
+/**
+ * @brief Proxy to call `button_clicked_register()` and `button_clicked_register2` from `CredentialService`
+ * @param widget 
+ * @param data `CredentialsData*`
+ */
+void register_user(GtkWidget *widget, gpointer data)
+{
+    CredentialsData *credentials_data = (CredentialsData *)data;
+    button_clicked_register(credentials_data->credential_service, credentials_data->name);
+    button_clicked_register2(credentials_data->credential_service, credentials_data->password);
+} 
 
 /**
  * @brief Proxy for the check_credentials function in CredentialService
+ * Calls `update_invalid_label()`
  * @param widget NULL
  * @param data Must be of type CredentialsData initiazlied with g_new()
  */
 int check_login_credentials(GtkWidget *widget, gpointer data)
 {
 
-    CredentialsData *credentials_data = (CredentialsData *)data; 
+    CredentialsData *credentials_data = (CredentialsData *)data;
     CredentialService *credential_service = credentials_data->credential_service;
-    GtkWidget *invalid_label = credentials_data->data;
+    GtkWidget *invalid_label = credentials_data->invalid_label_widget;
     int logged_in_flag = check_credentials(credential_service);
     update_invalid_label(invalid_label, logged_in_flag);
 }
 
 /**
- * @brief changes the gui label to show if credentials are valid or not  
- * @param invalid_label 
- * @param logged_in_flag 
+ * @brief Changes the gui label to show if credentials are valid or not
+ * @param invalid_label
+ * @param logged_in_flag
  */
-void update_invalid_label(GtkWidget* invalid_label, int logged_in_flag)
+void update_invalid_label(GtkWidget *invalid_label, int logged_in_flag)
 {
-	if (!logged_in_flag)
-	{
-		gtk_label_set_text(GTK_LABEL(invalid_label), "invalid");
-	}
-	else
-	{
-		gtk_label_set_text(GTK_LABEL(invalid_label), "Success!");
-	}
+    if (!logged_in_flag)
+    {
+        gtk_label_set_text(GTK_LABEL(invalid_label), "invalid");
+    }
+    else
+    {
+        gtk_label_set_text(GTK_LABEL(invalid_label), "Success!");
+    }
 }
-
-

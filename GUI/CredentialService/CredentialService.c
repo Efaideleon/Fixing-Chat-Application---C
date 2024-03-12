@@ -11,8 +11,20 @@ void button_clicked2(CredentialService *credential_service, char *password)
     strncpy(credential_service->password, password, sizeof(credential_service->password));
     strcat(credential_service->name, " ");
     strcat(credential_service->name, credential_service->password);
-
     credential_service->LogInFlag = 1;
+}
+
+static void button_clicked_register(CredentialService *credential_service, char *name)
+{
+    strncpy(credential_service->name, name, sizeof(credential_service->name));
+}
+
+static void button_clicked_register2(CredentialService *credential_service, char *password)
+{
+    strncpy(credential_service->password, password, sizeof(credential_service->password));
+    strcat(credential_service->name, " ");
+    strcat(credential_service->name, credential_service->password);
+    credential_service->RegFlag = 1;
 }
 
 int check_credentials(CredentialService *credential_service)
@@ -32,7 +44,7 @@ int check_credentials(CredentialService *credential_service)
         if (*sign_up_valid == TRUE)
         {
             *sign_in_valid = TRUE;
-            return TRUE; 
+            return TRUE;
         }
         else if (*sign_in_valid == FALSE)
         {
