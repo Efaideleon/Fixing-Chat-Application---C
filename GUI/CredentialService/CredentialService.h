@@ -2,6 +2,8 @@
 #define CREDENTIAL_SERVICE_HEADER
 
 #include <stdlib.h>
+#include "../NetworkService/NetworkService.h"
+
 // #include "gtk/gtk.h"
 
 typedef struct
@@ -13,6 +15,7 @@ typedef struct
     int signUpvalid;
     int SignUp;
     int RegFlag;
+    int signInvalid;
     NetworkService *network_service;
 } CredentialService;
 
@@ -34,7 +37,7 @@ void button_clicked2(CredentialService *credential_service, char *password);
 /**
  * @brief Void function for signin signup validation
  *
- * @param credential_service
+ * @param credential_service `CredentialService*`
  */
 void check_credentials(CredentialService *credential_service);
 

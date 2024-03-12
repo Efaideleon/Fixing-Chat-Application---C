@@ -52,8 +52,8 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
 
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(create_friend_window), NULL);
 
-    // credentials_data->data = NULL;
-    // g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(check_credentials), NULL);
+    credentials_data->data = NULL;
+    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(check_credentials), NULL);
 
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(CreateWindow), NULL);
 
@@ -87,7 +87,7 @@ typedef struct
 
 /**
  * @brief
- * Proxy function to call button_clicked from CredentialSerivce.c 
+ * Proxy function to call button_clicked from CredentialSerivce.c
  * @param widget Must be initialized with gtk_entry_new();
  * @param data Must be of type CredentialsData initialized with g_new()
  */
@@ -97,10 +97,10 @@ void get_name_and_usermane(GtkWidget *, gpointer data)
 
     GtkWidget *temp_data = gtk_label_new("");
     gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(credentials_data->data)));
-    
+
     int NAME_SIZE = sizeof(credentials_data->credential_service->name);
     int USERNAME_SIZE = sizeof(credentials_data->credential_service->username);
- 
+
     char name[NAME_SIZE];
     char username[USERNAME_SIZE];
     strncpy(name, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(name));
@@ -120,7 +120,7 @@ void get_password(GtkWidget *widget, gpointer data)
 
     GtkWidget *temp_data = gtk_label_new("");
     gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(credentials_data->data)));
-    
+
     int PASS_SIZE = sizeof(credentials_data->credential_service->password);
 
     char password[PASS_SIZE];
@@ -129,8 +129,57 @@ void get_password(GtkWidget *widget, gpointer data)
 }
 
 /**
- * @brief Void function for signin signup validation
+ * @brief Proxy for the check_credentials function in CredentialService
  * @param widget NULL
  * @param data Must be of type CredentialsData initiazlied with g_new()
  */
-void check_login_credentials(GtkWidget *widget, gpointer data);
+void check_login_credentials(GtkWidget *widget, gpointer data)
+{
+
+    CredentialsData *credentials_data = (CredentialsData *)data; 
+    CredentialService *credential_service_ptr = credentials_data->credential_service;
+    check_credentials(credential_service_ptr);
+
+    int *sign_up_valid_ptr = &credential_service_ptr->signUpvalid;
+    int *sign_in_valid_ptr = &credential_service_ptr->signInvalid;
+    int *reg_flag_ptr = &credential_service_ptr->RegFlag;
+    int *log_in_flag_ptr = &credential_service_ptr->LogInFlag;
+    char *name_ptr = &credential_service_ptr->name;
+
+    if (*reg_flag_ptr != 0 && *name_ptr != NULL)
+    {
+        if (*sign_up_valid_ptr == TRUE)
+        {
+            *sign_in_valid_ptr = TRUE;
+            update_invalid_label(); // BUG: still neeed to implement this
+        }
+        else if (*sign_in_valid_ptr == FALSE) // BUG: potential bug
+        {
+            *sign_in_valid_ptr = FALSE;
+            update_invalid_label();
+        }
+    }
+    if (*log_in_flag_ptr != 0 && *name_ptr != NULL)
+    {
+        if (*sign_in_valid_ptr == TRUE)
+        {
+            *sign_up_valid_ptr = TRUE;
+            update_invalid_label();
+        }
+        else if (*sign_in_valid_ptr == FALSE)
+        {
+            *sign_up_valid_ptr = FALSE;
+            update_invalid_label();
+        }
+    }
+}
+
+/**
+ * @brief STILL NEED TO IMPLEMENT
+ * 
+ */
+void update_invalid_label(void)
+{
+}
+
+

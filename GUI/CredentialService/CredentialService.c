@@ -1,5 +1,8 @@
 #include "CredentialService.h"
 
+#define TRUE = 1; // BUG: This is supposed to be TRUE, Need to load globals
+#define FALSE = 0;
+
 void button_clicked(CredentialService *credential_service, char *name, char *username)
 {
     strncpy(credential_service->name, name, sizeof(credential_service->name));
@@ -15,45 +18,28 @@ void button_clicked2(CredentialService *credential_service, char *password)
     credential_service->LogInFlag = 1;
 }
 
-void check_credentials(GtkWidget *widget, gpointer data)
+void check_credentials(CredentialService *credential_service)
 {
-    CredentialsData *credentials_data = (CredentialsData *)data;
-	if (credentials_data->credential_service->RegFlag != 0 && credentials_data->credential_service->name != NULL)
-	{
+    if (credential_service->RegFlag != 0 && credential_service->name != NULL)
+    {
+        credential_service->signUpvalid = SignUp(credential_service->name,credential_service->network_service->RecvBuf, credential_service->network_service->SocketFD);
+        credential_service->RegFlag = 0;
 
-		credentials_data->credential_service->signUpvalid = SignUp(credentials_data->credential_service->name, credentials_data->credential_service->network_service->RecvBuf,credentials_data->credential_service->network_service->SocketFD);
-		credentials_data->credential_service->RegFlag = 0;
-		if ( signUpvalid == TRUE)
-		{
-			signInvalid = TRUE;
-			update_invalid_label();
-		}
-		else if (signInvalid == FALSE)
-		{
-			signInvalid = FALSE;
-			update_invalid_label();
-		}
-	}
-	if (LogInFlag != 0 && name != NULL)
-	{
-		signInvalid = SignIn(name, RecvBuf, SocketFD);
-		fl = malloc(30 * sizeof(char));
-		fl[0] = '\0';
-		strcat(fl, FriendList());
-		if (fl != NULL)
-		{
-			printf("fl is %s\n", fl);
-		}
-		LogInFlag = 0;
-		if (signInvalid == TRUE)
-		{
-			signUpvalid = TRUE;
-			update_invalid_label();
-		}
-		else if (signInvalid == FALSE)
-		{
-			signUpvalid = FALSE;
-			update_invalid_label();
-		}
+    }
+    if ( credential_service->LogInFlag != 0 && credential_service->name != NULL)
+    {
+        credential_service->signInvalid = SignIn(credential_service->name, credential_service->network_service->RecvBuf,credential_service->network_service->SocketFD);
+
+        /* BUG: This code will be called when the user is able to login and the friend list is created
+        *       Ideally by the window manager
+        */
+        // fl = malloc(30 * sizeof(char));
+        // fl[0] = '\0';
+        // strcat(fl, FriendList());
+        // if (fl != NULL)
+        // {
+        //     printf("fl is %s\n", fl);
+        // }
+        credential_service->LogInFlag = 0;
     }
 }
