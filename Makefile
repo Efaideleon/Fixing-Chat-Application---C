@@ -4,7 +4,7 @@
 # VsCreator: Justin Kim
 
 # GTK Compiler Flags 
-GTKINC  = `pkg-config --cflags gtk+-2.0`
+GTKINC  = `pkg-config --cflags gtk+-2.0` 
 GTKLIBS = `pkg-config --libs gtk+-2.0`
 
 #Debug Flags
@@ -12,8 +12,8 @@ DEBUG = -g -DDEBUG
 CDEBUG = -g -DDEBUG -DCDEBUG
 
 #Compiling Flags 
-CFLAGS  = -Wall -ansi -std=c99 $(GTKINC) -c
-LFLAGS  = -Wall -ansi -std=c99 $(GTKLIBS)
+CFLAGS  = -Wall -ansi -std=c99 $(GTKINC) -c -Wno-deprecated-declarations
+LFLAGS  = -Wall -ansi -std=c99 $(GTKLIBS) -Wno-deprecated-declarations
 
 all: Server Client
 
