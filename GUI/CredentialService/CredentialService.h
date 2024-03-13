@@ -3,12 +3,7 @@
 
 #include <stdlib.h>
 #include "../NetworkService/NetworkService.h"
-
-// #include "gtk/gtk.h"
-
-#define TRUE 1 // BUG: This is supposed to be TRUE, Need to load globals
-#define FALSE 0
-
+#include "../../TestClient.h"
 typedef struct
 {
     char username[50];
@@ -44,7 +39,7 @@ void button_clicked2(CredentialService *credential_service, char *password);
  */
 int check_credentials(CredentialService *credential_service);
 
-void button_clicked_register();
-void button_clicked_register2();
+void button_clicked_register(CredentialService *credential_service, char *name);
+void button_clicked_register2(CredentialService *credential_service, char *password);
 
 #endif

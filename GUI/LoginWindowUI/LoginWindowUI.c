@@ -1,6 +1,111 @@
 #include "LoginWindowUI.h"
 #include <stdio.h>
 
+// Helper Structs
+
+typedef struct
+{
+    GtkWidget *entry_widget; // Entry widget where the user types username
+    GtkWidget *entry2_widget; // Entry widget where the user types password
+    GtkWidget *invalid_label_widget; // Label that indicates if the credentials are valid
+    CredentialService *credential_service; // Reference to CredentialService
+    char *name; // Cleaned username in char* form
+    char *password; // Cleaned passowrd in char* form
+} CredentialsData;
+
+// Helper Functions
+
+/**
+ * @brief Get the clean string from an entry widget 
+ * @param widget 
+ * @param size Size of the expect string
+ * @return char* 
+ */
+void get_clean_string(GtkWidget *widget, char *buffer, int size) {
+    GtkWidget *temp_data = gtk_label_new("");
+    gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(widget)));
+    strncpy(buffer, gtk_label_get_text(GTK_LABEL(temp_data)), size - 1); 
+    buffer[size - 1] = '\0'; 
+}
+
+/**
+ * @brief Get the name and password and load it into the CredentialsData
+ * @param widget 
+ * @param data `CredentialsData*`
+ */
+void get_name_and_password(GtkWidget *widget, gpointer data)
+{
+    CredentialsData *credentials_data = (CredentialsData *)data;
+    int NAME_SIZE = sizeof(credentials_data->credential_service->name);
+    int PASSWORD_SIZE =  sizeof(credentials_data->credential_service->password);
+    char name_buffer[NAME_SIZE];
+    char password_buffer[PASSWORD_SIZE];
+
+    get_clean_string(credentials_data->entry_widget, name_buffer, NAME_SIZE);
+
+    get_clean_string(credentials_data->entry2_widget, password_buffer, PASSWORD_SIZE);
+
+    credentials_data->name = name_buffer;
+    credentials_data->password = password_buffer;
+}
+
+/**
+ * @brief Proxy to call `button_clicked()` and `button_clicked` from `CredentialService`
+ * @param widget 
+ * @param data `CredentialsData*`
+ */
+void login_in_user(GtkWidget *widget, gpointer data)
+{
+    CredentialsData *credentials_data = (CredentialsData *)data;
+    button_clicked(credentials_data->credential_service, credentials_data->name, credentials_data->name);
+    button_clicked2(credentials_data->credential_service, credentials_data->password);
+}
+
+/**
+ * @brief Proxy to call `button_clicked_register()` and `button_clicked_register2` from `CredentialService`
+ * @param widget 
+ * @param data `CredentialsData*`
+ */
+void register_user(GtkWidget *widget, gpointer data)
+{
+    CredentialsData *credentials_data = (CredentialsData *)data;
+    button_clicked_register(credentials_data->credential_service, credentials_data->name);
+    button_clicked_register2(credentials_data->credential_service, credentials_data->password);
+} 
+
+/**
+ * @brief Proxy for the check_credentials function in CredentialService
+ * Calls `update_invalid_label()`
+ * @param widget NULL
+ * @param data Must be of type CredentialsData initiazlied with g_new()
+ */
+void check_login_credentials(GtkWidget *widget, gpointer data)
+{
+
+    CredentialsData *credentials_data = (CredentialsData *)data;
+    CredentialService *credential_service = credentials_data->credential_service;
+    GtkWidget *invalid_label = credentials_data->invalid_label_widget;
+    int logged_in_flag = check_credentials(credential_service);
+    update_invalid_label(invalid_label, logged_in_flag);
+}
+
+/**
+ * @brief Changes the gui label to show if credentials are valid or not
+ * @param invalid_label
+ * @param logged_in_flag
+ */
+void update_invalid_label(GtkWidget *invalid_label, int logged_in_flag)
+{
+    if (!logged_in_flag)
+    {
+        gtk_label_set_text(GTK_LABEL(invalid_label), "invalid");
+    }
+    else
+    {
+        gtk_label_set_text(GTK_LABEL(invalid_label), "Success!");
+    }
+}
+
 void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *credential_service)
 {
     login_window_ui->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -52,7 +157,7 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
 
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(create_friend_window), NULL);
 
-    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(check_login_credentials), NULL);
+    g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(check_login_credentials), credentials_data);
 
     // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(CreateWindow), NULL);
 
@@ -63,7 +168,7 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
 
     // g_signal_connect(login_window_ui.button2, "clicked", G_CALLBACK(create_friend_window), NULL);
 
-    g_signal_connect(login_window_ui->button2, "clicked", G_CALLBACK(check_login_credentials), NULL);
+    g_signal_connect(login_window_ui->button2, "clicked", G_CALLBACK(check_login_credentials), credentials_data);
     // g_signal_connect(login_window_ui.button2, "clicked", G_CALLBACK(CreateWindow), NULL);
 
     // Button Clicks for Quit
@@ -77,101 +182,3 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
     gtk_container_add(GTK_CONTAINER(login_window_ui->window), login_window_ui->vbox);
 }
 
-// Helper Structs
-
-typedef struct
-{
-    GtkWidget *entry_widget; // Entry widget where the user types username
-    GtkWidget *entry2_widget; // Entry widget where the user types password
-    GtkWidget *invalid_label_widget; // Label that indicates if the credentials are valid
-    CredentialService *credential_service; // Reference to CredentialService
-    char *name; // Cleaned username in char* form
-    char *password; // Cleaned passowrd in char* form
-} CredentialsData;
-
-// Helper Functions
-
-/**
- * @brief Get the clean string from an entry widget 
- * @param widget 
- * @param size Size of the expect string
- * @return char* 
- */
-char *get_clean_string(GtkWidget *widget, int size)
-{
-    GtkWidget *temp_data = gtk_labe_new("");
-    char string[size];
-    gtk_label_set_text(GTK_LABEL(temp_data), gtk_entry_get_text(GTK_ENTRY(widget)));
-    strncpy(string, gtk_label_get_text(GTK_LABEL(temp_data)), sizeof(string));
-    return string;
-}
-
-/**
- * @brief Get the name and password and load it into the CredentialsData
- * @param widget 
- * @param data `CredentialsData*`
- */
-void get_name_and_password(GtkWidget *widget, gpointer data)
-{
-    CredentialsData *credentials_data = (CredentialsData *)data;
-    credentials_data->name = get_clean_string(credentials_data->entry_widget, sizeof(credentials_data->credential_service->name));
-
-    credentials_data->password = get_clean_string(credentials_data->entry2_widget, sizeof(credentials_data->credential_service->password));
-}
-
-/**
- * @brief Proxy to call `button_clicked()` and `button_clicked` from `CredentialService`
- * @param widget 
- * @param data `CredentialsData*`
- */
-void login_in_user(GtkWidget *widget, gpointer data)
-{
-    CredentialsData *credentials_data = (CredentialsData *)data;
-    button_clicked(credentials_data->credential_service, credentials_data->name, credentials_data->name);
-    button_clicked2(credentials_data->credential_service, credentials_data->password);
-}
-
-/**
- * @brief Proxy to call `button_clicked_register()` and `button_clicked_register2` from `CredentialService`
- * @param widget 
- * @param data `CredentialsData*`
- */
-void register_user(GtkWidget *widget, gpointer data)
-{
-    CredentialsData *credentials_data = (CredentialsData *)data;
-    button_clicked_register(credentials_data->credential_service, credentials_data->name);
-    button_clicked_register2(credentials_data->credential_service, credentials_data->password);
-} 
-
-/**
- * @brief Proxy for the check_credentials function in CredentialService
- * Calls `update_invalid_label()`
- * @param widget NULL
- * @param data Must be of type CredentialsData initiazlied with g_new()
- */
-int check_login_credentials(GtkWidget *widget, gpointer data)
-{
-
-    CredentialsData *credentials_data = (CredentialsData *)data;
-    CredentialService *credential_service = credentials_data->credential_service;
-    GtkWidget *invalid_label = credentials_data->invalid_label_widget;
-    int logged_in_flag = check_credentials(credential_service);
-    update_invalid_label(invalid_label, logged_in_flag);
-}
-
-/**
- * @brief Changes the gui label to show if credentials are valid or not
- * @param invalid_label
- * @param logged_in_flag
- */
-void update_invalid_label(GtkWidget *invalid_label, int logged_in_flag)
-{
-    if (!logged_in_flag)
-    {
-        gtk_label_set_text(GTK_LABEL(invalid_label), "invalid");
-    }
-    else
-    {
-        gtk_label_set_text(GTK_LABEL(invalid_label), "Success!");
-    }
-}
