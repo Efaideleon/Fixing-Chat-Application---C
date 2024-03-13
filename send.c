@@ -762,7 +762,8 @@ void DeclineFriendRequest(int DataSocketFD, char *RecvBuf, RUNLIST *list)
 
 void RemoveFriendRequest(int DataSocketFD, char *Recvbuf, RUNLIST *list)
 {
-	RUNENTRY *findUser, *nextUser;
+	RUNENTRY *findUser;
+	// RUNENTRY *nextUser;
 	findUser = list->first;
 	int l = strlen(Recvbuf);
 
@@ -781,7 +782,7 @@ void RemoveFriendRequest(int DataSocketFD, char *Recvbuf, RUNLIST *list)
 #endif
 	while (findUser)
 	{
-		nextUser = findUser->next;
+		// nextUser = findUser->next;
 		if (DataSocketFD == findUser->socketID)
 		{
 			removeFriend(findUser->user, intendedUser);

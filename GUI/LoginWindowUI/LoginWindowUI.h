@@ -31,8 +31,11 @@ typedef struct
  * @return LoginWindowUI
  */
 void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *credential_service);
-void update_invalid_label();
-
-
+void update_invalid_label(GtkWidget *invalid_label, int logged_in_flag);
+void check_login_credentials(GtkWidget *widget, gpointer data);
+void get_clean_string(GtkWidget *widget, char *buffer, int size);
+void get_name_and_password(GtkWidget *widget, gpointer data);
+void login_in_user(GtkWidget *widget, gpointer data);
+void register_user(GtkWidget *widget, gpointer data);
 
 #endif

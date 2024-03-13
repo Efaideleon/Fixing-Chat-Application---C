@@ -2,6 +2,8 @@
 
 void button_clicked(CredentialService *credential_service, char *name, char *username)
 {
+    printf("name: %s\n: ", name);
+    printf("*name: %s\n", *name);
     strncpy(credential_service->name, name, sizeof(credential_service->name));
     strncpy(credential_service->username, username, sizeof(username));
 }
@@ -14,12 +16,12 @@ void button_clicked2(CredentialService *credential_service, char *password)
     credential_service->LogInFlag = 1;
 }
 
-static void button_clicked_register(CredentialService *credential_service, char *name)
+void button_clicked_register(CredentialService *credential_service, char *name)
 {
     strncpy(credential_service->name, name, sizeof(credential_service->name));
 }
 
-static void button_clicked_register2(CredentialService *credential_service, char *password)
+void button_clicked_register2(CredentialService *credential_service, char *password)
 {
     strncpy(credential_service->password, password, sizeof(credential_service->password));
     strcat(credential_service->name, " ");
@@ -39,7 +41,7 @@ int check_credentials(CredentialService *credential_service)
 
     if (*reg_flag != 0 && *name != NULL)
     {
-        *sign_up_valid = SignUp(*name, network_service->RecvBuf, network_service->SocketFD);
+        *sign_up_valid = SignUp(name, network_service->RecvBuf, network_service->SocketFD);
         *reg_flag = 0;
         if (*sign_up_valid == TRUE)
         {
@@ -54,7 +56,7 @@ int check_credentials(CredentialService *credential_service)
     }
     if (*log_in_flag != 0 && *name != NULL)
     {
-        *sign_in_valid = SignIn(*name, network_service->RecvBuf, network_service->SocketFD);
+        *sign_in_valid = SignIn(name, network_service->RecvBuf, network_service->SocketFD);
 
         /* BUG: This code will be called when the user is able to login and the friend list is created
          *       Ideally by the window manager
