@@ -24,7 +24,8 @@
         "user.h": "c",
         "credentialservice.h": "c",
         "loginwindowui.h": "c",
-        "networkservice.h": "c"
+        "networkservice.h": "c",
+        "stdio.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

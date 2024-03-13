@@ -115,7 +115,7 @@ int SignIn(char *SendBuf, char *RecvBuf, int SocketFD)
 
 	FL = malloc(30 * sizeof(char));
 	FL[0] = '\0';
-	while (Sep[i] != NULL)
+	while (Sep[i] != NULL) // BUG: crashes with EXEC_BAD_ACCESS
 	{
 		strcat(FL, Sep[i]);
 		strcat(FL, " ");
