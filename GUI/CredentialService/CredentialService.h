@@ -20,43 +20,57 @@ typedef struct
     NetworkService *network_service;
 } CredentialService;
 
-/**
- * @brief stores the name and username from data to credentialservice
- * 
- * @param credential_serivce
- */
-void button_clicked(CredentialService *credential_serivce, char *name, char *username);
 
 /**
- * @brief Stores the password from data to CredentialService
- * and sets the LogInFlag to 1 so that the user can attempt to login
- * 
- * @param credential_service
- */
-void button_clicked2(CredentialService *credential_service, char *password);
-
-/**
- * @brief Void function for signin signup validation
- *
- * @param credential_service `CredentialService*`
- */
-int check_credentials(CredentialService *credential_service);
-
-/**
- * @brief Stores the name from the entry box to the credential_service instance
+ * @brief Sets name, username and password in CredentialService and set RegFlag to 1
  * 
  * @param credential_service 
- * @param name name to be stored
+ * @param name 
+ * @param password 
  */
-void button_clicked_register(CredentialService *credential_service, char *name);
+void sign_up(CredentialService *credential_service, char* name, char *password);
 
 /**
- * @brief  Stores the password from the entry box to the credential_service instace
+ * @brief Sets name, username, and passsword in CredentialService and sets LogInFlag to 1
  * 
- * @param credential_service
- * @param password password to be stored
+ * @param credential_service 
+ * @param name 
+ * @param username 
+ * @param password 
  */
-void button_clicked_register2(CredentialService *credential_service, char *password);
+void login(CredentialService *credential_service, char *name, char *username, char *password);
+
+/**
+ * @brief Set the password attribute in CredentialService
+ * 
+ * @param credential_service 
+ * @param password 
+ */
+void set_password(CredentialService *credential_service, char *password);
+
+/**
+ * @brief Set the username attribute in CredentialService 
+ * 
+ * @param credential_service 
+ * @param username 
+ */
+void set_username(CredentialService *credential_service, char *username);
+
+/**
+ * @brief Set the name attribute in CredentialService 
+ * 
+ * @param credential_service 
+ * @param name 
+ */
+void set_name(CredentialService* credential_service, char *name);
+
+/**
+ * @brief return 1 if the credentials are valid, 0 for invalid
+ * 
+ * @param credential_service 
+ * @return int 
+ */
+int check_credentials(CredentialService *credential_service);
 
 /**
  * @brief Create a credential service object

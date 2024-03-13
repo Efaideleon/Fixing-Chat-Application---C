@@ -1,29 +1,58 @@
 #include "CredentialService.h"
 
-void button_clicked(CredentialService *credential_service, char *name, char *username)
+void set_name(CredentialService* credential_service, char *name)
 {
-    strncpy(credential_service->name, name, NAME_SIZE);
-    strncpy(credential_service->username, username, NAME_SIZE);
+    if (credential_service == NULL || name == NULL) {
+        fprintf(stderr, "Invalid pointer provided to set_name function.\n");
+        return;
+    }
+
+    name[NAME_SIZE - 1] = '\0';
+    strncpy(credential_service->name, name, NAME_SIZE - 1);
+    credential_service->name[NAME_SIZE - 1] = '\0';
 }
 
-void button_clicked2(CredentialService *credential_service, char *password)
+void set_username(CredentialService *credential_service, char *username)
 {
-    strncpy(credential_service->password, password, sizeof(credential_service->password));
+    if (credential_service == NULL || username == NULL) {
+        fprintf(stderr, "Invalid pointer provided to set_username function.\n");
+        return;
+    }
+
+    username[NAME_SIZE - 1] = '\0';
+    strncpy(credential_service->username, username, NAME_SIZE - 1);
+    credential_service->username[NAME_SIZE - 1] = '\0';
+}
+
+void set_password(CredentialService *credential_service, char *password)
+{
+    if (credential_service == NULL || password == NULL) 
+    {
+        fprintf(stderr, "Invalid pointer provided to get_password function.\n");
+        return;
+    }
+
+    password[PASSWORD_SIZE - 1] = '\0';
+
+    strncpy(credential_service->password, password, PASSWORD_SIZE - 1);
+    credential_service->password[PASSWORD_SIZE - 1] = '\0';
+
     strcat(credential_service->name, " ");
     strcat(credential_service->name, credential_service->password);
+}
+
+void login(CredentialService *credential_service, char *name, char *username, char *password)
+{
+    set_name(credential_service, name);
+    set_username(credential_service, username);
+    set_password(credential_service, password);
     credential_service->LogInFlag = 1;
 }
 
-void button_clicked_register(CredentialService *credential_service, char *name)
+void sign_up(CredentialService *credential_service, char* name, char *password)
 {
-    strncpy(credential_service->name, name, NAME_SIZE);
-}
-
-void button_clicked_register2(CredentialService *credential_service, char *password)
-{
-    strncpy(credential_service->password, password, sizeof(PASSWORD_SIZE));
-    strcat(credential_service->name, " ");
-    strcat(credential_service->name, credential_service->password);
+    set_name(credential_service, name);
+    set_password(credential_service, password);
     credential_service->RegFlag = 1;
 }
 
@@ -83,7 +112,8 @@ int check_credentials(CredentialService *credential_service)
     return FALSE;
 }
 
-void create_credential_service(CredentialService *credential_service, NetworkService *network_service) {
+void create_credential_service(CredentialService *credential_service, NetworkService *network_service)
+{
     credential_service->LogInFlag = 0;
     credential_service->RegFlag = 0;
     credential_service->signInvalid = 0;

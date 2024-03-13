@@ -7,14 +7,19 @@
 int main(int argc, char *argv[])
 {
     gtk_init(&argc, &argv);
+
     NetworkService network_service;
+
     CredentialService credential_service;
     create_credential_service(&credential_service, &network_service);
+
     LoginWindowUI login_window_ui;
     create_login_window_ui(&login_window_ui, &credential_service);
+
     CreateSocket(argc, argv, &network_service.SocketFD, network_service.SendBuf, network_service.RecvBuf);
 
     gtk_widget_show_all(login_window_ui.window);
+    
     while (1)
     {
         while (gtk_events_pending())

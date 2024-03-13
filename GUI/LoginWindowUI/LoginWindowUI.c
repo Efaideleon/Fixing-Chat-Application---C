@@ -26,8 +26,7 @@ void login_in_user(GtkWidget *widget, gpointer data)
     CredentialsData *credentials_data = (CredentialsData *)data;
     get_name_and_password(credentials_data);
 
-    button_clicked(credentials_data->credential_service, credentials_data->name, credentials_data->name);
-    button_clicked2(credentials_data->credential_service, credentials_data->password);
+    login(credentials_data->credential_service, credentials_data->name, credentials_data->name, credentials_data->password);
 }
 
 void register_user(GtkWidget *widget, gpointer data)
@@ -35,8 +34,7 @@ void register_user(GtkWidget *widget, gpointer data)
     CredentialsData *credentials_data = (CredentialsData *)data;
     get_name_and_password(credentials_data);
     
-    button_clicked_register(credentials_data->credential_service, credentials_data->name);
-    button_clicked_register2(credentials_data->credential_service, credentials_data->password);
+    sign_up(credentials_data->credential_service, credentials_data->name, credentials_data->password);
 } 
 
 void check_login_credentials(GtkWidget *widget, gpointer data)
