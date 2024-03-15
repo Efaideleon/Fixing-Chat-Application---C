@@ -25,7 +25,10 @@
         "credentialservice.h": "c",
         "loginwindowui.h": "c",
         "networkservice.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "applicationmanager.h": "c",
+        "messageservice.h": "c",
+        "windowmanager.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

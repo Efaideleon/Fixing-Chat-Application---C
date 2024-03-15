@@ -13,3 +13,18 @@ typedef struct
 } FriendRequestWidgetUI;
 
 #endif
+
+/**
+ * @brief Destroys the FriendRequestWidgetUI->window by calling `gtk_widget_destroy()`
+ * frees the memory allocated to friend_request_widget_ui 
+ * 
+ * @return FriendRequestWidgetUI* 
+ */
+FriendRequestWidgetUI *create_friend_request_widget_ui();
+
+/**
+ * @brief 
+ * 
+ * @param friend_request_widget_ui 
+ */
+void destroy_friend_request_widget_ui(FriendRequestWidgetUI *friend_request_widget_ui);

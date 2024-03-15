@@ -12,4 +12,7 @@ typedef struct
     GtkWidget *hbox;
 } RemoveFriendWidgetUI;
 
+RemoveFriendWidgetUI *create_remove_friend_widget_ui();
+
+void destroy_remove_friend_widget_ui(RemoveFriendWidgetUI *remove_friend_widget_ui);
 #endif

@@ -17,6 +17,7 @@ typedef struct
     int SignUp;
     int RegFlag;
     int signInvalid;
+    int logged_in;
     NetworkService *network_service;
 } CredentialService;
 
@@ -73,11 +74,18 @@ void set_name(CredentialService* credential_service, char *name);
 int check_credentials(CredentialService *credential_service);
 
 /**
- * @brief Create a credential service object
+ * @brief Create a credential service object with malloc()
+ * 
+ * @param network_service 
+ * @return CredentialService* 
+ */
+CredentialService* create_credential_service(NetworkService *network_service);
+
+/**
+ * @brief free memory allocated to credential_service
  * 
  * @param credential_service 
- * @param network_service 
  */
-void create_credential_service(CredentialService *credential_service, NetworkService *network_service);
+void destroy_credential_service(CredentialService *credential_service);
 
 #endif

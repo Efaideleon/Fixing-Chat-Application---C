@@ -1,31 +1,39 @@
-#include "../NetworkService/NetworkService.h"
-#include "../LoginWindowUI/LoginWindowUI.h"
-#include "../CredentialService/CredentialService.h"
-#include <stdio.h>
-#include "../../TestClient.h"
+#include "ApplicationManager.h"
 
-int main(int argc, char *argv[])
+ApplicationManager *create_application_manger()
 {
-    gtk_init(&argc, &argv);
+    ApplicationManager *app_manager = (ApplicationManager *)malloc(sizeof(ApplicationManager));
 
-    NetworkService network_service;
+    app_manager->network_service = create_network_service();
+    app_manager->credential_service = create_credential_service(app_manager->network_service);
+    app_manager->message_service = create_message_service(app_manager->network_service);
+    app_manager->friend_request_handler = create_friend_request_handler(app_manager->message_service);
+    return app_manager;
+}
 
-    CredentialService credential_service;
-    create_credential_service(&credential_service, &network_service);
+void destroy_application_manager(ApplicationManager *app_manager)
+{
+    destroy_credential_service(app_manager->credential_service);
+    destroy_message_service(app_manager->message_service);
+    destroy_network_service(app_manager->network_service);
+    destroy_friend_request_handler(app_manager->friend_request_handler);
+    free(app_manager);
+}
 
-    LoginWindowUI login_window_ui;
-    create_login_window_ui(&login_window_ui, &credential_service);
-
-    CreateSocket(argc, argv, &network_service.SocketFD, network_service.SendBuf, network_service.RecvBuf);
-
-    gtk_widget_show_all(login_window_ui.window);
-    
-    while (1)
+int get_FriendFlag(ApplicationManager *app_manager)
+{
+    if (app_manager->credential_service->logged_in == 1 || app_manager->friend_request_handler->friend_flag == 1)
     {
-        while (gtk_events_pending())
-        {
-            gtk_main_iteration();
-        }
+        return 1;
+    }
+    return 0;
+}
+
+int get_ChatFlag(ApplicationManager *app_manager)
+{
+    if (app_manager->friend_request_handler->chat_window_flag == 1)
+    {
+        return 1;
     }
     return 0;
 }

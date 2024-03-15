@@ -10,6 +10,11 @@ void get_clean_string(GtkWidget *widget, char *buffer, int size) {
 
 void get_name_and_password(CredentialsData *credentials_data)
 {
+    if (credentials_data == NULL)
+    {
+        fprintf(stderr, "Invalid pointer, credentials_data is undefined in get_name_password.\n");
+    }
+
     char name_buffer[NAME_SIZE];
     char password_buffer[PASSWORD_SIZE];
 
@@ -24,6 +29,10 @@ void get_name_and_password(CredentialsData *credentials_data)
 void login_in_user(GtkWidget *widget, gpointer data)
 {
     CredentialsData *credentials_data = (CredentialsData *)data;
+    if (credentials_data == NULL)
+    {
+        fprintf(stderr, "Invalid pointer, credentails_data is undefined in login_in_user.\n");
+    }
     get_name_and_password(credentials_data);
 
     login(credentials_data->credential_service, credentials_data->name, credentials_data->name, credentials_data->password);
@@ -32,6 +41,10 @@ void login_in_user(GtkWidget *widget, gpointer data)
 void register_user(GtkWidget *widget, gpointer data)
 {
     CredentialsData *credentials_data = (CredentialsData *)data;
+    if (credentials_data == NULL)
+    {
+        fprintf(stderr, "Invalid pointer, credentials_data is undefined in register_user.\n");
+    }
     get_name_and_password(credentials_data);
     
     sign_up(credentials_data->credential_service, credentials_data->name, credentials_data->password);
@@ -41,6 +54,10 @@ void check_login_credentials(GtkWidget *widget, gpointer data)
 {
 
     CredentialsData *credentials_data = (CredentialsData *)data;
+    if (credentials_data == NULL)
+    {
+        fprintf(stderr, "Invalid pointer, credentials_data is undefined in check_login_credentials.\n");
+    }
     CredentialService *credential_service = credentials_data->credential_service;
     GtkWidget *invalid_label = credentials_data->invalid_label_widget;
     int logged_in_flag = check_credentials(credential_service);
@@ -59,8 +76,9 @@ void update_invalid_label(GtkWidget *invalid_label, int logged_in_flag)
     }
 }
 
-void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *credential_service)
+LoginWindowUI *create_login_window_ui(CredentialService *credential_service)
 {
+    LoginWindowUI *login_window_ui = (LoginWindowUI*)malloc(sizeof(LoginWindowUI));
     login_window_ui->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(login_window_ui->window), 300, 350);
 
@@ -131,5 +149,13 @@ void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *c
     gtk_box_pack_start(GTK_BOX(login_window_ui->hbutton_box), login_window_ui->button, 0, 0, 0);
     gtk_box_pack_start(GTK_BOX(login_window_ui->vbox), login_window_ui->hbutton_box, 2, 0, 0);
     gtk_container_add(GTK_CONTAINER(login_window_ui->window), login_window_ui->vbox);
+
+    return login_window_ui;
+}
+
+void destroy_login_window_ui(LoginWindowUI *login_window_ui)
+{
+    gtk_widget_destroy(login_window_ui->window);
+    free(login_window_ui);
 }
 

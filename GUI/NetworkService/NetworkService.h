@@ -11,4 +11,17 @@ typedef struct
     int SocketFD;
 } NetworkService;
 
+/**
+ * @brief Create a network service object using malloc
+ * 
+ * @return NetworkService* 
+ */
+NetworkService *create_network_service();
+
+/**
+ * @brief frees memory allocated to network_service
+ * 
+ * @param network_service 
+ */
+void destroy_network_service(NetworkService *network_service);
 #endif

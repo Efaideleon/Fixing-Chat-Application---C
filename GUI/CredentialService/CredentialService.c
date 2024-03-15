@@ -100,11 +100,13 @@ int check_credentials(CredentialService *credential_service)
         if (*sign_in_valid == TRUE)
         {
             *sign_up_valid = TRUE;
+            credential_service->logged_in = 1;
             return TRUE;
         }
         else if (*sign_in_valid == FALSE)
         {
             *sign_up_valid = FALSE;
+            credential_service->logged_in = 0;
             return FALSE;
         }
     }
@@ -112,12 +114,20 @@ int check_credentials(CredentialService *credential_service)
     return FALSE;
 }
 
-void create_credential_service(CredentialService *credential_service, NetworkService *network_service)
+CredentialService *create_credential_service(NetworkService *network_service)
 {
+    CredentialService *credential_service = (CredentialService*)malloc(sizeof(CredentialService));
     credential_service->LogInFlag = 0;
     credential_service->RegFlag = 0;
     credential_service->signInvalid = 0;
     credential_service->SignUp = 0;
     credential_service->signUpvalid = 0;
+    credential_service->logged_in = 0;
     credential_service->network_service = network_service;
+    return credential_service;
+}
+
+void destroy_credential_service(CredentialService *credential_service)
+{
+    free(credential_service);
 }
