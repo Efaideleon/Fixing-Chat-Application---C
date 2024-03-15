@@ -38,11 +38,17 @@ typedef struct
 /**
  * @brief Create a login window ui object that denpends on credential service
  * 
- * @param login_window_ui `LoginWindowUI` instance
  * @param credential_service `CredentialService` instance
  */
-void create_login_window_ui(LoginWindowUI *login_window_ui, CredentialService *credential_service);
+LoginWindowUI* create_login_window_ui(CredentialService *credential_service);
 
+/**
+ * @brief Destroys the LoginWindowUI->window by calling `gtk_widget_destroy()`
+ * frees the memory allocated to login_window_ui
+ * 
+ * @param login_window_ui 
+ */
+void destroy_login_window_ui(LoginWindowUI *login_window_ui);
 
 /**
  * @brief Changes the gui label to show if credentials are valid or not
