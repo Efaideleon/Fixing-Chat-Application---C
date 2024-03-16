@@ -2,7 +2,110 @@
 
 ChatWindowUI *create_chat_window_ui()
 {
-    return (ChatWindowUI*)malloc(sizeof(ChatWindowUI));
+    ChatWindowUI* chat_window_ui = (ChatWindowUI *)malloc(sizeof(ChatWindowUI));
+
+    chat_window_ui->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_default_size(GTK_WINDOW(chat_window_ui->window), 300, 350);
+
+    // Button To End Program
+    // g_signal_connect(chat_window_ui->window, "delete_event", G_CALLBACK(close_program), NULL);
+
+    gtk_container_set_border_width(GTK_CONTAINER(chat_window_ui->window), 10);
+
+    // message label not to be displayed
+    chat_window_ui->message_label = gtk_label_new(" ");
+
+    // Table Container Created
+    chat_window_ui->table = gtk_table_new(3, 6, FALSE);
+    gtk_container_add(GTK_CONTAINER(chat_window_ui->window), chat_window_ui->table);
+
+    // Create a New notebook, Set Tab
+    chat_window_ui->notebook = gtk_notebook_new();
+    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(chat_window_ui->notebook), GTK_POS_TOP);
+    gtk_table_attach_defaults(GTK_TABLE(chat_window_ui->table),chat_window_ui->notebook, 0, 6, 0, 1);
+    gtk_widget_show(chat_window_ui->notebook);
+
+    for (int i = 0; i < 10; i++)
+    {
+        chat_window_ui->message_buffer[i] = gtk_text_buffer_new(NULL); // Create new buffers
+    }
+    // Scrolled Window with Text Box
+    for (int i = 9; i > -1; i--)
+    {
+        if (contacts[i] != NULL)
+        {
+
+            chat_window_ui->text_area[i] = gtk_text_view_new();
+
+            chat_window_ui->message_buffer[i] = gtk_text_view_get_buffer(GTK_TEXT_VIEW(chat_window_ui->text_area[i]));
+
+            gtk_text_buffer_set_text(chat_window_ui->message_buffer[i], "Hello!", -1);
+
+            GtkWidget *console = gtk_table_new(3, 2, FALSE);
+
+            chat_window_ui->scrolled_window = gtk_vscrollbar_new(gtk_text_view_get_vadjustment(GTK_TEXT_VIEW(chat_window_ui->text_area[i])));
+
+            gtk_table_attach_defaults(GTK_TABLE(console), chat_window_ui->text_area[i], 0, 5, 0, 1);
+            gtk_table_attach_defaults(GTK_TABLE(console), chat_window_ui->scrolled_window, 5, 6, 0, 1);
+
+            gtk_widget_set_size_request(chat_window_ui->text_area[i], 200, 200);
+            gtk_text_view_set_buffer(GTK_TEXT_VIEW(chat_window_ui->text_area[i]), chat_window_ui->message_buffer[i]);
+
+            // Create Entry
+            chat_window_ui->message[i] = gtk_entry_new();
+            chat_window_ui->buffer[i] = gtk_entry_buffer_new("Enter Message", -1);
+            gtk_entry_set_buffer(GTK_ENTRY(chat_window_ui->message[i]), (chat_window_ui->buffer[i]));
+
+            gtk_table_attach_defaults(GTK_TABLE(console), chat_window_ui->message[i], 0, 4, 1, 2);
+            gtk_widget_show(chat_window_ui->message[i]);
+
+            // Create Buttons
+            chat_window_ui->button = gtk_button_new_with_label("Send");
+            gtk_table_attach_defaults(GTK_TABLE(console),chat_window_ui->button, 5, 6, 1, 2);
+            g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(send_message), chat_window_ui->message_label);
+            gtk_widget_show(chat_window_ui->button);
+
+            chat_window_ui->button = gtk_button_new_with_label("Close");
+            g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(delete_chat_window), NULL);
+            g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(create_friend_window), NULL);
+            g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(CreateWindow), NULL);
+
+            gtk_table_attach_defaults(GTK_TABLE(console),chat_window_ui->button, 0, 1, 2, 3);
+            gtk_widget_show(chat_window_ui->button);
+
+            chat_window_ui->button = gtk_button_new_with_label("Request Message");
+            g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(request_message), NULL);
+            gtk_table_attach_defaults(GTK_TABLE(console),chat_window_ui->button, 1, 2, 2, 3);
+            gtk_widget_show(chat_window_ui->button);
+
+            chat_window_ui->button = gtk_button_new_with_label("Accept Friend");
+
+            g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(accept_friend), NULL);
+            gtk_table_attach_defaults(GTK_TABLE(console),chat_window_ui->button, 2, 3, 2, 3);
+            gtk_widget_show(chat_window_ui->button);
+
+            chat_window_ui->button = gtk_button_new_with_label("Remove Friend");
+            g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(remove_book), notebook);
+            g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(CreateWindow), NULL);
+            gtk_table_attach_defaults(GTK_TABLE(console), chat_window_ui->button, 5, 6, 2, 3);
+            gtk_widget_show(chat_window_ui->button);
+
+            // Add Page
+            chat_window_ui->label = gtk_label_new(contacts[i]);
+            gtk_notebook_insert_page(GTK_NOTEBOOK(chat_window_ui->notebook), console,chat_window_ui->label, 0);
+        }
+    }
+
+    // Set what page to start at (page 1)
+    // GtkWidget *parent = gtk_widget_get_parent(console);
+    // if (parent != NULL)
+    // {
+    // 	gtk_container_remove(GTK_CONTAINER(parent), console);
+    // }
+    // gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), console, label, 0);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(chat_window_ui->notebook), 0);
+
+    return chat_window_ui;
 }
 
 void destroy_chat_window_ui(ChatWindowUI *chat_window_ui)
