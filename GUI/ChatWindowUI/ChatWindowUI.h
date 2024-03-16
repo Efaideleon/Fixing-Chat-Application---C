@@ -8,9 +8,12 @@ typedef struct
     GtkWidget *button;
     GtkWidget *table;
     GtkWidget *label;
-    GtkWidget *text_area;
-    GtkEntryBuffer *buffer;
+    GtkWidget *text_area[10];
+    GtkEntryBuffer *buffer[10];
     GtkWidget *message_label;
+    GtkWidget *notebook;
+    GtkWidget *message[10];
+    GtkTextBuffer *message_buffer[10];
 } ChatWindowUI;
 
 
