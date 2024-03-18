@@ -28,7 +28,10 @@
         "stdio.h": "c",
         "applicationmanager.h": "c",
         "messageservice.h": "c",
-        "windowmanager.h": "c"
+        "windowmanager.h": "c",
+        "chatwindowui.h": "c",
+        "friendlistui.h": "c",
+        "friendrequesthandler.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

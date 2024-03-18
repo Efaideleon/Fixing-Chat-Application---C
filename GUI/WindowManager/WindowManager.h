@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "../../TestClient.h"
 #include "../ApplicationManager/ApplicationManager.h"
+#include "../FriendRequestHandler/FriendRequestHandler.h"
 
 typedef struct
 {
@@ -33,7 +34,7 @@ void create_friend_window();
  * @param friend_list_ui 
  */
 void CreateWindow(ApplicationManager *app_manager, LoginWindowUI **login_window_ui, ChatWindowUI **chat_window_ui, FriendListUI **friend_list_ui);
-void delete_chat_window();
+void delete_chat_window(MessageService *message_service);
 void close_friend_window();
 void create_chat_window();
 void delete_friend_window();

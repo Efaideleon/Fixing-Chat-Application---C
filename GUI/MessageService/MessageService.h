@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "gtk/gtk.h"
 #include "../NetworkService/NetworkService.h"
+#include "../../TestClient.h"
 typedef struct
 {
     GtkWidget *message;
@@ -12,10 +13,30 @@ typedef struct
     char st[500];
     int OpenDialog;
     NetworkService *network_service;
+    int chat_flag;
+    int match;
+    int current_page_i;
+    char response[300];
 } MessageService;
 
-void send_message();
-void request_message();
+int read_compare(char response[400]);
+
+void send_message(MessageService *message_service, char *sent_message, char *send_to_user_name);
+
+/**
+ * @brief checks if a message has been sent to the user and displays in on screen
+ * 
+ * @param notebook 
+ * @param contacts 
+ * @param username 
+ * @param SocketFD 
+ * @param OpenDialog 
+ * @param message_buffer 
+ * @return int : 1 if it should call show_open_dialog
+ */
+int request_message(GtkWidget *notebook, char contacts[10][30], char *username, int SocketFD, int *OpenDialog, GtkTextBuffer **message_buffer, MessageService *message_service);
+
+void delete_chat_window(MessageService *message_serivce);
 
 /**
  * @brief Create a message service object using malloc

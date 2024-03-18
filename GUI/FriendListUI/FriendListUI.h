@@ -44,5 +44,4 @@ void create_Add_Friend_Window_proxy(GtkWidget *widget, gpointer data);
 void update_contact_list_proxy(GtkWidget *widget, gpointer data);
 void delete_friend_window_proxy(GtkWidget *widget, gpointer data);
 
-
 #endif

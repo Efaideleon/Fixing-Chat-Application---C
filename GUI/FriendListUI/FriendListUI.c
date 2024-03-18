@@ -1,5 +1,6 @@
 #include "FriendListUI.h"
 
+
 void close_friend_window_proxy(GtkWidget *widget, gpointer data)
 {
     FriendListUIData *friend_list_ui_data = (FriendListUIData*)(data);

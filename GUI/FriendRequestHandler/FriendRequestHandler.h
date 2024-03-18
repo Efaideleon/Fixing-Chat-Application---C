@@ -18,8 +18,21 @@ typedef struct
     // char friend_name[];
 } FriendRequestHandler;
 
-void accept_friend();
 
+typedef struct 
+{
+    int *OpenDialog;
+    int SocketFD;
+} AcceptFriendData;
+
+
+void show_open_dialog(int match, char contacts[10][30], char *response, int *OpenDialog, int SocketFD, char *username, GtkTextBuffer **message_buffer, int i);
+
+void open_dialog(int OpenDialog, int SocketFD);
+
+void accept_friend(GtkWidget *widget, gpointer data);
+
+void destroy_popup(GtkWidget *widget, gpointer data);
 
 void button_clicked_add();
 void button_clicked_remove();
@@ -71,4 +84,5 @@ void set_add_friend_window_flag(FriendRequestHandler *friend_request_handler, in
  * @param state 
  */
 void set_chat_window_flag(FriendRequestHandler *friend_request_handler, int state);
+
 #endif
