@@ -5,6 +5,7 @@ MessageService *create_message_service(NetworkService *network_service)
     MessageService *message_service = (MessageService *)malloc(sizeof(MessageService));
 
     message_service->network_service = network_service;
+    message_service->OpenDialog = 0;
     return message_service;
 }
 
@@ -16,7 +17,7 @@ void destroy_message_service(MessageService *message_service)
 void send_message(MessageService *message_service, char *sent_message, char *send_to_user_name)
 {
     char recieved[300];
-    char st[500];
+    char st[500] = {};
     strcat(st, "sendto ");
     strcat(st, send_to_user_name);
     strcat(st, " ");
@@ -51,9 +52,8 @@ void delete_chat_window(MessageService *message_service)
 int read_compare(char response[400])
 {
     FILE *fp;
-    char content[100];
-
-    if ((fp = fopen("../../UserList", "r+")) == NULL)
+    char content[100] = {};
+    if ((fp = fopen("/Users/efaideleon/Desktop/Fixing Chat Application in c/UserList", "r+")) == NULL)
     { // Open in read-write mode
         printf("couldn't open file\n");
         return -1; // Indicate error
@@ -61,6 +61,10 @@ int read_compare(char response[400])
 
     while (fgets(content, sizeof(content), fp))
     {
+        if (response[0] == '\0')
+        {
+            break;
+        }
         if (strstr(content, response))
         {
             strncpy(content, "", sizeof(content) - 1); // Leave space for null terminator

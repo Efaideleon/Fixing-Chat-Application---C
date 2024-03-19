@@ -37,3 +37,15 @@ int get_ChatFlag(ApplicationManager *app_manager)
     }
     return 0;
 }
+
+void set_FriendFlag(ApplicationManager *app_manager, int state)
+{
+    app_manager->credential_service->logged_in = 0;
+    app_manager->friend_request_handler->friend_flag = 0;
+}
+
+void set_ChatFlag(ApplicationManager *app_manager, int state)
+{
+    app_manager->friend_request_handler->chat_window_flag = 1;
+    app_manager->message_service->chat_flag = 1;
+}
