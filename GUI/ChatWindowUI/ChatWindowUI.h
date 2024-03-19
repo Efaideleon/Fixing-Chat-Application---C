@@ -26,7 +26,7 @@ typedef struct
 {
     GtkWidget *notebook;
     GtkWidget *message[10];
-    GtkTextBuffer *message_buffer[20];
+    GtkTextBuffer *message_buffer[10];
     FriendRequestHandler *friend_request_handler;
     MessageService *message_service;
     CredentialService *credential_service;

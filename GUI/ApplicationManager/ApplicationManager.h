@@ -46,4 +46,19 @@ int get_FriendFlag(ApplicationManager *app_manager);
  */
 int get_ChatFlag(ApplicationManager *app_manager);
 
+/**
+ * @brief Set the chat_flag in message service to open and close chat window 
+ * 
+ * @param app_manager 
+ * @param state 
+ */
+void set_ChatFlag(ApplicationManager *app_manager, int state);
+
+/**
+ * @brief Set the friend_flag in friend_request_handler to open and close friend window
+ * 
+ * @param app_manager 
+ * @param state 
+ */
+void set_FriendFlag(ApplicationManager *app_manager, int state);
 #endif

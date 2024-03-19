@@ -22,7 +22,7 @@ void open_dialog(int OpenDialog, int SocketFD)
 	gtk_widget_show_all(window_dialog);
 }
 
-void show_open_dialog(int match, char contacts[10][30], char *response, int *OpenDialog, int SocketFD, char *username, GtkTextBuffer **message_buffer, int i)
+void show_open_dialog(int match, char contacts[10][30], char *response, int *OpenDialog, int SocketFD, char *username, GtkTextBuffer *message_buffer[10], int i)
 {
 	if ((match == 1) && (strcmp(contacts[i], response) != 0) && (strcmp(response, username) != 0))
 	{

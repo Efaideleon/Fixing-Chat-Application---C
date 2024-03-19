@@ -120,5 +120,6 @@ FriendListUI *create_friend_list_ui(FriendRequestHandler *friend_request_handler
 
 void destroy_friend_list_ui(FriendListUI *friend_list_ui)
 {
+    gtk_widget_destroy(friend_list_ui->window);
     free(friend_list_ui);
 }

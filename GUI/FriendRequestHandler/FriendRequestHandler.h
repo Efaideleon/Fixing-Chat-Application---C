@@ -26,7 +26,7 @@ typedef struct
 } AcceptFriendData;
 
 
-void show_open_dialog(int match, char contacts[10][30], char *response, int *OpenDialog, int SocketFD, char *username, GtkTextBuffer **message_buffer, int i);
+void show_open_dialog(int match, char contacts[10][30], char *response, int *OpenDialog, int SocketFD, char *username, GtkTextBuffer *message_buffer[10], int i);
 
 void open_dialog(int OpenDialog, int SocketFD);
 

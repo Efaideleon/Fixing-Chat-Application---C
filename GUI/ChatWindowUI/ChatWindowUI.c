@@ -23,7 +23,7 @@ void request_message_proxy(GtkWidget *widget, gpointer data)
     ChatWindowProxyData *chat_window_proxy_data = (ChatWindowProxyData *)data;
     if (request_message(chat_window_proxy_data->notebook, chat_window_proxy_data->friend_request_handler->contacts, chat_window_proxy_data->credential_service->username, chat_window_proxy_data->message_service->network_service->SocketFD, &chat_window_proxy_data->OpenDialog, chat_window_proxy_data->message_buffer, chat_window_proxy_data->message_service) == 1)
     {
-        show_open_dialog(chat_window_proxy_data->message_service->match, chat_window_proxy_data->friend_request_handler->contacts, chat_window_proxy_data->message_service->response, &chat_window_proxy_data->message_service->OpenDialog, chat_window_proxy_data->message_service->network_service->SocketFD, chat_window_proxy_data->credential_service->username, chat_window_proxy_data->message_service->messager_buffer, chat_window_proxy_data->message_service->current_page_i);
+        show_open_dialog(chat_window_proxy_data->message_service->match, chat_window_proxy_data->friend_request_handler->contacts, chat_window_proxy_data->message_service->response, &chat_window_proxy_data->message_service->OpenDialog, chat_window_proxy_data->message_service->network_service->SocketFD, chat_window_proxy_data->credential_service->username, chat_window_proxy_data->message_buffer, chat_window_proxy_data->message_service->current_page_i);
     }
 }
 
@@ -81,7 +81,10 @@ ChatWindowUI *create_chat_window_ui(FriendRequestHandler *friend_request_handler
 
             chat_window_ui->message_buffer[i] = gtk_text_view_get_buffer(GTK_TEXT_VIEW(chat_window_ui->text_area[i]));
 
+            chat_window_proxy_data->message_buffer[i] = chat_window_ui->message_buffer[i];
+            
             gtk_text_buffer_set_text(chat_window_ui->message_buffer[i], "Hello!", -1);
+
 
             GtkWidget *console = gtk_table_new(3, 2, FALSE);
 
@@ -153,5 +156,6 @@ ChatWindowUI *create_chat_window_ui(FriendRequestHandler *friend_request_handler
 
 void destroy_chat_window_ui(ChatWindowUI *chat_window_ui)
 {
+    gtk_widget_destroy(chat_window_ui->window);
     free(chat_window_ui);
 }
