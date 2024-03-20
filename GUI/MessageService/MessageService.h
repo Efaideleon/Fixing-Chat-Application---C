@@ -52,4 +52,12 @@ MessageService *create_message_service(NetworkService *network_service);
  * @param message_service 
  */
 void destroy_message_service(MessageService *message_service);
+
+/**
+ * @brief sends a friend request a friend by their name
+ * 
+ * @param network_service 
+ * @param friendname 
+ */
+void button_clicked_add(NetworkService *network_service, char friendname[50]);
 #endif

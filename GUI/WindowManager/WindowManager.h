@@ -23,8 +23,6 @@ typedef struct
     GtkWidget *AddFriendWindow;
 } WindowManager;
 
-void create_friend_window();
-
 /**
  * @brief Determines which window should be created or destroyed
  * 
@@ -35,9 +33,4 @@ void create_friend_window();
  */
 void CreateWindow(ApplicationManager *app_manager, LoginWindowUI **login_window_ui, ChatWindowUI **chat_window_ui, FriendListUI **friend_list_ui);
 void delete_chat_window(MessageService *message_service);
-void close_friend_window();
-void create_chat_window();
-void delete_friend_window();
-void Delete_Friend_Entry();
-void Delete_Friend_Entry2();
 #endif
