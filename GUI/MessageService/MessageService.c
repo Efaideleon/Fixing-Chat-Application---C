@@ -14,6 +14,20 @@ void destroy_message_service(MessageService *message_service)
     free(message_service);
 }
 
+void button_clicked_add(NetworkService *network_service, char friendname[50])
+{
+	char response_add[40] = {};
+    char add_to[40] = {};
+
+	strcat(add_to, "addto ");
+	strcat(add_to, friendname);
+	SendMessage(add_to, response_add, network_service->SocketFD);
+	printf("response from server = %s\n", response_add);
+
+	strncpy(add_to, "", sizeof(add_to));
+	strncpy(response_add, "", sizeof(response_add));
+}
+
 void send_message(MessageService *message_service, char *sent_message, char *send_to_user_name)
 {
     char recieved[300];

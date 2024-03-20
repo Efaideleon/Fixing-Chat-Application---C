@@ -105,7 +105,7 @@ void CreateWindow(ApplicationManager *app_manager, LoginWindowUI **login_window_
 			set_ChatFlag(app_manager, 0);
 			*chat_window_ui = NULL;
 		}
-		*friend_list_ui = create_friend_list_ui(app_manager->friend_request_handler);
+		*friend_list_ui = create_friend_list_ui(app_manager->friend_request_handler, app_manager->credential_service->username);
 		gtk_widget_show_all((*friend_list_ui)->window);
 	}
 }

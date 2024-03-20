@@ -31,7 +31,8 @@
         "windowmanager.h": "c",
         "chatwindowui.h": "c",
         "friendlistui.h": "c",
-        "friendrequesthandler.h": "c"
+        "friendrequesthandler.h": "c",
+        "friendrequestwidgetui.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

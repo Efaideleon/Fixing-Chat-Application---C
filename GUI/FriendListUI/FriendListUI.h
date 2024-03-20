@@ -5,7 +5,7 @@
 #include "gtk/gtk.h"
 #include "../FriendRequestHandler/FriendRequestHandler.h"
 #include "../../TestClient.h"
-
+#include "../FriendRequestWidgetUI/FriendRequestWidgetUI.h"
 typedef struct
 {
     GtkWidget *window;
@@ -14,6 +14,7 @@ typedef struct
     GtkWidget *scroll_window;
     GtkWidget *vbox;
     GtkWidget *table;
+    char *user_name;
     char *fl;
 } FriendListUI;
 
@@ -28,7 +29,7 @@ typedef struct
  * 
  * @return FriendListUI* 
  */
-FriendListUI *create_friend_list_ui(FriendRequestHandler *friend_request_handler);
+FriendListUI *create_friend_list_ui(FriendRequestHandler *friend_request_handler, char *user_name);
 
 /**
  * @brief Destroys the FriendListUI->window by calling `gtk_widget_destroy()`

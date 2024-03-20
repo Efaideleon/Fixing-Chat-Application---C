@@ -34,7 +34,6 @@ void accept_friend(GtkWidget *widget, gpointer data);
 
 void destroy_popup(GtkWidget *widget, gpointer data);
 
-void button_clicked_add();
 void button_clicked_remove();
 
 /**

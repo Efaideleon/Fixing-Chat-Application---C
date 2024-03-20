@@ -106,21 +106,6 @@ void update_contanct_list(GtkWidget *friend_list_window, FriendRequestHandler *f
 	// free(tempFL);
 }
 
-void button_clicked_add()
-{
-	// char response_add[40];
-	// gtk_label_set_text(GTK_LABEL(data), gtk_entry_get_text(GTK_ENTRY(add_f_entry)));
-	// strncpy(friendname, gtk_label_get_text(GTK_LABEL(data)), sizeof(friendname));
-
-	// strcat(add_to, "addto ");
-	// strcat(add_to, friendname);
-	// SendMessage(add_to, response_add, SocketFD);
-	// printf("response from server = %s\n", response_add);
-
-	// strncpy(add_to, "", sizeof(add_to));
-	// strncpy(response_add, "", sizeof(response_add));
-}
-
 void button_clicked_remove()
 {
 	// gtk_label_set_text(GTK_LABEL(data), gtk_entry_get_text(GTK_ENTRY(rm_f_entry)));

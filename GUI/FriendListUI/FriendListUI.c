@@ -14,7 +14,7 @@ void create_Remove_Friend_Window_proxy(GtkWidget *widget, gpointer data)
 void create_Add_Friend_Window_proxy(GtkWidget *widget, gpointer data)
 {
     FriendListUIData *friend_list_ui_data = (FriendListUIData*)(data);
-    set_add_friend_window_flag(friend_list_ui_data->friend_request_handler, 1);
+    create_friend_request_widget_ui(friend_list_ui_data->friend_request_handler);
 }
 
 void updatae_contact_list_proxy(GtkWidget *widget, gpointer data)
@@ -35,9 +35,10 @@ void create_chat_window_proxy(GtkWidget *widget, gpointer data)
     set_chat_window_flag(friend_list_ui_data->friend_request_handler, 1);
 }
 
-FriendListUI *create_friend_list_ui(FriendRequestHandler *friend_request_handler)
+FriendListUI *create_friend_list_ui(FriendRequestHandler *friend_request_handler, char *user_name)
 {
     FriendListUI *friend_list_ui = (FriendListUI *)malloc(sizeof(FriendListUI));
+    friend_list_ui->user_name = user_name;
     FriendListUIData *friend_list_ui_data = g_new(FriendListUIData, 1);
     friend_list_ui_data->friend_request_handler = friend_request_handler;
 
@@ -95,8 +96,8 @@ FriendListUI *create_friend_list_ui(FriendRequestHandler *friend_request_handler
     friend_list_ui->button = gtk_button_new_with_label("  X  ");
     gtk_table_attach(GTK_TABLE(friend_list_ui->table), friend_list_ui->button, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 40, 0);
     // g_signal_connect(friend_list_ui->button, "clicked", G_CALLBACK(Remove_Friend_Window), NULL);
-    // label = gtk_label_new(username);
-    // gtk_table_attach(GTK_TABLE(friend_list_ui->table),friend_list_ui->label, 4, 6, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+    friend_list_ui->label = gtk_label_new(friend_list_ui->user_name);
+    gtk_table_attach(GTK_TABLE(friend_list_ui->table),friend_list_ui->label, 4, 6, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
     friend_list_ui->button = gtk_button_new_with_label("  +  ");
     g_signal_connect(friend_list_ui->button, "clicked", G_CALLBACK(create_Add_Friend_Window_proxy), friend_list_ui_data);
     gtk_table_attach(GTK_TABLE(friend_list_ui->table), friend_list_ui->button, 9, 10, 0, 1, GTK_FILL, GTK_FILL, 40, 0);
