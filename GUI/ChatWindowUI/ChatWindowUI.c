@@ -43,8 +43,6 @@ ChatWindowUI *create_chat_window_ui(FriendRequestHandler *friend_request_handler
     gtk_window_set_default_size(GTK_WINDOW(chat_window_ui->window), 300, 350);
 
     ChatWindowProxyData *chat_window_proxy_data = g_new(ChatWindowProxyData, 1);
-    // Button To End Program
-    // g_signal_connect(chat_window_ui->window, "delete_event", G_CALLBACK(close_program), NULL);
 
     gtk_container_set_border_width(GTK_CONTAINER(chat_window_ui->window), 10);
 
@@ -113,8 +111,6 @@ ChatWindowUI *create_chat_window_ui(FriendRequestHandler *friend_request_handler
 
             chat_window_ui->button = gtk_button_new_with_label("Close");
             g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(close_chat_window_proxy), chat_window_proxy_data);
-            // g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(create_friend_window), NULL);
-            // g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(CreateWindow), NULL);
 
             gtk_table_attach_defaults(GTK_TABLE(console), chat_window_ui->button, 0, 1, 2, 3);
             gtk_widget_show(chat_window_ui->button);
@@ -126,13 +122,10 @@ ChatWindowUI *create_chat_window_ui(FriendRequestHandler *friend_request_handler
 
             chat_window_ui->button = gtk_button_new_with_label("Accept Friend");
 
-            // g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(accept_friend), NULL);
             gtk_table_attach_defaults(GTK_TABLE(console), chat_window_ui->button, 2, 3, 2, 3);
             gtk_widget_show(chat_window_ui->button);
 
             chat_window_ui->button = gtk_button_new_with_label("Remove Friend");
-            // g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(remove_book), notebook);
-            // g_signal_connect(chat_window_ui->button, "clicked", G_CALLBACK(CreateWindow), NULL);
             gtk_table_attach_defaults(GTK_TABLE(console), chat_window_ui->button, 5, 6, 2, 3);
             gtk_widget_show(chat_window_ui->button);
 
@@ -141,14 +134,6 @@ ChatWindowUI *create_chat_window_ui(FriendRequestHandler *friend_request_handler
             gtk_notebook_insert_page(GTK_NOTEBOOK(chat_window_ui->notebook), console, chat_window_ui->label, 0);
         }
     }
-
-    // Set what page to start at (page 1)
-    // GtkWidget *parent = gtk_widget_get_parent(console);
-    // if (parent != NULL)
-    // {
-    // 	gtk_container_remove(GTK_CONTAINER(parent), console);
-    // }
-    // gtk_notebook_insert_page(GTK_NOTEBOOK(notebook), console, label, 0);
     gtk_notebook_set_current_page(GTK_NOTEBOOK(chat_window_ui->notebook), 0);
 
     return chat_window_ui;

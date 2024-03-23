@@ -82,8 +82,6 @@ LoginWindowUI *create_login_window_ui(CredentialService *credential_service)
     login_window_ui->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(login_window_ui->window), 300, 350);
 
-    // Button Click To End Program
-    // g_signal_connect(login_window_ui.window, "delete_event", G_CALLBACK(close_program), NULL);
     login_window_ui->label = gtk_label_new("");
     login_window_ui->label3 = gtk_label_new("");
     login_window_ui->invalid_label = gtk_label_new("");
@@ -117,7 +115,7 @@ LoginWindowUI *create_login_window_ui(CredentialService *credential_service)
 
     // Button Clicks For Login
 
-    CredentialsData *credentials_data = g_new(CredentialsData, 1); // remember to free using g_free()
+    CredentialsData *credentials_data = g_new(CredentialsData, 1); 
     credentials_data->credential_service = credential_service;
     credentials_data->entry_widget = login_window_ui->entry;
     credentials_data->entry2_widget = login_window_ui->entry2;
@@ -125,24 +123,13 @@ LoginWindowUI *create_login_window_ui(CredentialService *credential_service)
 
     g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(login_in_user), credentials_data);
 
-    // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(create_friend_window), NULL);
-
     g_signal_connect(login_window_ui->button, "clicked", G_CALLBACK(check_login_credentials), credentials_data);
-
-    // g_signal_connect(login_window_ui.button, "clicked", G_CALLBACK(CreateWindow), NULL);
 
     // Button Clicks for Register
 
     g_signal_connect(login_window_ui->button2, "clicked", G_CALLBACK(register_user), credentials_data);
 
-    // g_signal_connect(login_window_ui.button2, "clicked", G_CALLBACK(create_friend_window), NULL);
-
     g_signal_connect(login_window_ui->button2, "clicked", G_CALLBACK(check_login_credentials), credentials_data);
-    // g_signal_connect(login_window_ui.button2, "clicked", G_CALLBACK(CreateWindow), NULL);
-
-    // Button Clicks for Quit
-    // g_signal_connect(login_window_ui.button3, "clicked", G_CALLBACK(gtk_main_quit), NULL);
-    // g_signal_connect(login_window_ui.button3, "clicked", G_CALLBACK(close_program), NULL);
 
     gtk_box_pack_start(GTK_BOX(login_window_ui->vbox), login_window_ui->invalid_label, 0, 0, 0);
     gtk_box_pack_start(GTK_BOX(login_window_ui->hbutton_box), login_window_ui->button2, 0, 0, 0);
