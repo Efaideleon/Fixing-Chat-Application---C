@@ -19,6 +19,8 @@ typedef struct
     char response[300];
 } MessageService;
 
+void friend_list(MessageService *message_serivce, char *response);
+
 int read_compare(char response[400]);
 
 void send_message(MessageService *message_service, char *sent_message, char *send_to_user_name);

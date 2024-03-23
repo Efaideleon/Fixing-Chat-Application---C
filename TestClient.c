@@ -52,6 +52,11 @@ void PingServer(const char *Message, char *RecvBuf, int SocketFD)
 	//	return(RecvBuf);
 }
 
+void get_friend_list(char *SendBuf, char *RecvBuf, int SocketFD) 
+{
+	PingServer(SendBuf, RecvBuf, SocketFD);
+}
+
 void ReturnFriendList(char *SendBuf, char *RecvBuf, int SocketFD)
 {
 	char *Message = "ReturnFriendList ";
@@ -132,6 +137,26 @@ int SignIn(char *SendBuf, char *RecvBuf, int SocketFD)
 	}
 	return valid;
 }
+
+// void read_friend_list(char **Sep)
+// {
+//     int i = 1;
+
+// 	// FIX: new fix
+// 	if (FL != NULL)
+// 	{
+// 		free(FL);
+// 	}
+
+// 	FL = malloc(30 * sizeof(char));
+// 	FL[0] = '\0';
+// 	while (Sep[i] != NULL) // BUG: crashes with EXEC_BAD_ACCESS
+// 	{
+// 		strcat(FL, Sep[i]);
+// 		strcat(FL, " ");
+// 		i++;
+// 	}
+// }
 
 char *FriendList()
 {

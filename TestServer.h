@@ -18,4 +18,3 @@ int MakeServerSocket(uint16_t PortNo);
 void FatalError(const char *ErrorMsg);
 
 void ProcessRequest(int DataSocketFD, fd_set ReadFDs, RUNLIST *list);
-

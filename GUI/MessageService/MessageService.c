@@ -92,3 +92,8 @@ int read_compare(char response[400])
     return 0;
 }
 
+void friend_list(MessageService *message_serivce, char *response)
+{
+    char *Message = "friend_list";
+    get_friend_list(Message, response, message_serivce->network_service->SocketFD);
+}

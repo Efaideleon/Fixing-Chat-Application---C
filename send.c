@@ -634,55 +634,57 @@ void AcceptFriendRequest(int DataSocketFD, char *RecvBuf, RUNLIST *list)
 		if (msgEntry != NULL)
 		{
 			nextEntry = msgEntry->next;
-
-			if ((strstr(msgEntry->message, "addto") != NULL))
+			if (msgEntry->message != NULL)
 			{
-				senderID = msgEntry->socketID;
-#ifdef DEBUG
-				printf("sender ID is : %d\n", senderID);
-#endif
-				int len = strlen(find_sender(senderID, list));
-				sender = malloc(len * sizeof(char));
-				sender[0] = '\0';
-				strcpy(sender, find_sender(senderID, list));
-
-				findUser->user->friendlist = add_friend(findUser->user, sender);
-
-#ifdef DEBUG
-				printf("the user is: %s\n", findUser->user->username);
-				printf("the friendlist is: %s\n", findUser->user->friendlist);
-#endif
-
-				writing_userInfo(findUser->user);
-
-				findUser->msglist->first = nextEntry;
-				if (nextEntry)
+				if ((strstr(msgEntry->message, "addto") != NULL))
 				{
+					senderID = msgEntry->socketID;
 #ifdef DEBUG
-					printf("SEND.C : ACCEPTFRIENDREQUEST: if(nextEntry) ifstatement is true.\n");
+					printf("sender ID is : %d\n", senderID);
 #endif
-					nextEntry->prev = NULL;
+					int len = strlen(find_sender(senderID, list));
+					sender = malloc(len * sizeof(char));
+					sender[0] = '\0';
+					strcpy(sender, find_sender(senderID, list));
+
+					findUser->user->friendlist = add_friend(findUser->user, sender);
+
 #ifdef DEBUG
-					printf("SEND.C : ACCEPTFRIENDREQUEST: if(nextEntry) ifstatement finshed.\n");
+					printf("the user is: %s\n", findUser->user->username);
+					printf("the friendlist is: %s\n", findUser->user->friendlist);
 #endif
+
+					writing_userInfo(findUser->user);
+
+					findUser->msglist->first = nextEntry;
+					if (nextEntry)
+					{
+#ifdef DEBUG
+						printf("SEND.C : ACCEPTFRIENDREQUEST: if(nextEntry) ifstatement is true.\n");
+#endif
+						nextEntry->prev = NULL;
+#ifdef DEBUG
+						printf("SEND.C : ACCEPTFRIENDREQUEST: if(nextEntry) ifstatement finshed.\n");
+#endif
+					}
+					else
+					{
+#ifdef DEBUG
+						printf("SEND.C : ACCEPTFRIENDREQUEST: if(nextEntry) ifstatement is false.\n");
+#endif
+						findUser->msglist->first = NULL;
+						findUser->msglist->last = NULL;
+#ifdef DEBUG
+						printf("SEND.C : ACCEPTFRIENDREQUEST: if(nextEntry) ifstatement false finished\n");
+#endif
+					}
+					findUser->msglist->length--;
+					DeleteMsgEntry(msgEntry);
+#ifdef DEBUG
+					printf("SEND.C : ACCEPTRIENDREQUEST: Deleted MsgEntry.\n");
+#endif
+					strcpy(sender, findUser->user->username);
 				}
-				else
-				{
-#ifdef DEBUG
-					printf("SEND.C : ACCEPTFRIENDREQUEST: if(nextEntry) ifstatement is false.\n");
-#endif
-					findUser->msglist->first = NULL;
-					findUser->msglist->last = NULL;
-#ifdef DEBUG
-					printf("SEND.C : ACCEPTFRIENDREQUEST: if(nextEntry) ifstatement false finished\n");
-#endif
-				}
-				findUser->msglist->length--;
-				DeleteMsgEntry(msgEntry);
-#ifdef DEBUG
-				printf("SEND.C : ACCEPTRIENDREQUEST: Deleted MsgEntry.\n");
-#endif
-				strcpy(sender, findUser->user->username);
 			}
 		}
 		findUser = nextUser;

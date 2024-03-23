@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 				if ((match == 1) && (strcmp(response, application_manager->credential_service->username) != 0))
 				{
 					application_manager->message_service->OpenDialog = 1;
-					open_dialog(application_manager->message_service->OpenDialog, application_manager->network_service->SocketFD);
+					open_dialog(application_manager->message_service->OpenDialog, application_manager->network_service->SocketFD, &application_manager->friend_request_handler);
 					strncpy(response, "", sizeof(response));
 				}
 			}
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 				{
 					if (request_message(chat_window_ui->notebook, application_manager->friend_request_handler->contacts, application_manager->credential_service->username, application_manager->network_service->SocketFD, &chat_window_ui->OpenDialog, chat_window_ui->message_buffer, application_manager->message_service) == 1)
 					{
-						show_open_dialog(application_manager->message_service->match, application_manager->friend_request_handler->contacts, application_manager->message_service->response, &application_manager->message_service->OpenDialog, application_manager->network_service->SocketFD, application_manager->credential_service->username, chat_window_ui->message_buffer, application_manager->message_service->current_page_i);
+						show_open_dialog(application_manager->message_service->match, application_manager->friend_request_handler->contacts, application_manager->message_service->response, &application_manager->message_service->OpenDialog, application_manager->network_service->SocketFD, application_manager->credential_service->username, chat_window_ui->message_buffer, application_manager->message_service->current_page_i, &application_manager->friend_request_handler);
 					}
 				}
 			}
@@ -105,7 +105,7 @@ void CreateWindow(ApplicationManager *app_manager, LoginWindowUI **login_window_
 			set_ChatFlag(app_manager, 0);
 			*chat_window_ui = NULL;
 		}
-		*friend_list_ui = create_friend_list_ui(app_manager->friend_request_handler, app_manager->credential_service->username);
+		*friend_list_ui = create_friend_list_ui(&app_manager->friend_request_handler, app_manager->credential_service->username);
 		gtk_widget_show_all((*friend_list_ui)->window);
 	}
 }

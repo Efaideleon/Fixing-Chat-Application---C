@@ -23,12 +23,14 @@ typedef struct
 {
     int *OpenDialog;
     int SocketFD;
+    char **friend_list;
+    FriendRequestHandler *friend_request_handler;
 } AcceptFriendData;
 
 
-void show_open_dialog(int match, char contacts[10][30], char *response, int *OpenDialog, int SocketFD, char *username, GtkTextBuffer *message_buffer[10], int i);
+void show_open_dialog(int match, char contacts[10][30], char *response, int *OpenDialog, int SocketFD, char *username, GtkTextBuffer *message_buffer[10], int i, FriendRequestHandler **friend_request_handler);
 
-void open_dialog(int OpenDialog, int SocketFD);
+void open_dialog(int OpenDialog, int SocketFD, FriendRequestHandler **friend_request_handler);
 
 void accept_friend(GtkWidget *widget, gpointer data);
 
@@ -42,7 +44,8 @@ void button_clicked_remove();
  * @param friend_list_window 
  * @param friend_request_handler 
  */
-void update_contanct_list(GtkWidget *friend_list_window, FriendRequestHandler *friend_request_handler);
+void update_contact_list(FriendRequestHandler **friend_request_handler);
+
 
 /**
  * @brief Create a friend request handler object using malloc

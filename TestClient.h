@@ -30,3 +30,5 @@ void CloseClient(char *SendBuf, char *RecvBuf, int SocketFD);
 void CloseServer(char *SendBuf, char *RecvBuf, int SocketFD);
 
 void CreateSocket(int argc, char *argv[], int *SocketFD, char *RecvBuf, char *SendBuf);
+
+void get_friend_list(char *SendBuf, char *RecvBuf, int SocketFD);
